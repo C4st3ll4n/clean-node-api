@@ -229,7 +229,7 @@ describe("SignUp Controller", () => {
 
     })
 
-    test("Should return 200 if valid data is provided", () => {
+    test("Should return 201 if valid data is provided", () => {
         const { sut } = makeSut()
         const httpRequest = {
             body: {
@@ -241,7 +241,7 @@ describe("SignUp Controller", () => {
         }
         const httpResponse = sut.handle(httpRequest)
 
-        expect(httpResponse.statusCode).toBe(200)
+        expect(httpResponse.statusCode).toBe(201)
         expect(httpResponse.body).toEqual({
             email: "valid_email@mail.com",
             name: "valid_name",
