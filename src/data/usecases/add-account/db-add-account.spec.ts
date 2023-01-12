@@ -80,14 +80,13 @@ describe("DbAddAccount Usecase", () => {
             email: "valid_email",
             password: "valid_password"
         }
-        sut.add(accountData)
+        await sut.add(accountData)
         expect(addSpy).toBeCalledWith({
             name: "valid_name",
             email: "valid_email",
             password: "hashed_password"
         })
     })
-
     
     test("Should throw if AddAccountRepository throws", async () => {
         const { sut, addAccountRepositoryStub } = makeSut()
@@ -99,5 +98,22 @@ describe("DbAddAccount Usecase", () => {
         }
         const promise = sut.add(accountData)
         await expect(promise).rejects.toThrow()
+    })
+
+     test("Should return an account on success", async () => {
+        const { sut } = makeSut()
+
+        const accountData = {
+            name: "valid_name",
+            email: "valid_email",
+            password: "valid_password"
+        }
+        const account = await sut.add(accountData)
+        expect(account).toEqual({
+            id: "valid_id",
+            name: "valid_name",
+            email: "valid_email",
+            password: "hashed_password"
+        })
     })
 })
