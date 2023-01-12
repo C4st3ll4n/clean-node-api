@@ -13,7 +13,7 @@ export class AccountMongoRepository implements AddAccountRepository {
         })
 
         const { _id, ...accountWithoutId } = account
-        
+
         return {
             id: _id.toString(),
             name: accountWithoutId['name'],
