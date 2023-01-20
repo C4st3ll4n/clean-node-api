@@ -1,5 +1,6 @@
 import request  from "supertest";
 import app from "../config/app";
+import { MongoHelper } from "../../infra/db/mongodb/helpers/mongo-helper";
 
 describe("Signup Route", () => {
     test("Should return an account on success", async()=> {
