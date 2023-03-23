@@ -6,6 +6,8 @@ const makeSut = (): LogErrorMongoRepository => {
 }
 describe("Log Error Mongo Repository", () => {
 
+    let logCollection
+
     beforeAll(async () => {
         await MongoHelper.connect(process.env.MONGO_URL)
     })
@@ -16,14 +18,16 @@ describe("Log Error Mongo Repository", () => {
     })
 
     beforeEach(async()=>{
-        const accountCollection = await MongoHelper.getCollection("logs")
-        await accountCollection.deleteMany({})
+        logCollection = await MongoHelper.getCollection("logs")
+        await logCollection.deleteMany({})
     })
 
     test("Should log an error with success", async () => {
         const sut = makeSut()
     
-        await sut.log("any_stack")
-        
+        await sut.logError("any_stack")
+
+        const count = await logCollection.countDocuments()
+        expect(count).toBe(1)
     })
 })
