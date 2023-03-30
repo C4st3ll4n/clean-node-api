@@ -133,9 +133,9 @@ describe("Login Controller", () => {
     })
 
     test("Should return 500 if Authentication throws", async () => {
-        const { sut, emailValidatorStub } = makeSut()
+        const { sut, authentication } = makeSut()
 
-        jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+        jest.spyOn(authentication, 'auth').mockImplementationOnce(() => {
             throw new Error()
         })
 
