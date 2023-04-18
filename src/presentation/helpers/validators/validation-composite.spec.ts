@@ -3,10 +3,15 @@ import { RequiredFieldValidation } from "./required-field-validation"
 import { Validation } from "./validation"
 import { ValidationComposite } from "./validation-composite"
 
-const makeStub = ():Validation =>{
-    class ValidationStub implements Validation{
+interface SutTypes {
+    sut: ValidationComposite,
+    stubs: Validation[]
+}
+
+const makeStub = (): Validation => {
+    class ValidationStub implements Validation {
         validate(input: any): Error {
-            return new MissingParamError("any_field")
+            return null
         }
 
     }
@@ -14,17 +19,46 @@ const makeStub = ():Validation =>{
     return new ValidationStub()
 }
 
-describe("Composite Validation", ()=>{
-    test("Should return Error when validation fails", ()=>{
-        const stub = makeStub()
+const makeSut = (): SutTypes => {
+    const stubs:Validation[] = [makeStub(), makeStub()]
 
-        const sut = new ValidationComposite([
-            stub
-        ])
+    const sut = new ValidationComposite(stubs)
 
-        const err = sut.validate({field:"any_value"})
+    return {
+        sut, stubs
+    }
+}
+
+
+describe("Composite Validation", () => {
+    test("Should return Error when validation fails", () => {
+        const { sut, stubs } = makeSut()
+
+        jest.spyOn(stubs[0],"validate").mockReturnValueOnce(new MissingParamError("any_field"))
+
+        const err = sut.validate({ field: "any_value" })
 
         expect(err).toEqual(new MissingParamError("any_field"))
     })
+
+    test("Should return null when validation succeeds", () => {
+        const { sut } = makeSut()
+
+        const err = sut.validate({ field: "any_value" })
+
+        expect(err).toBeFalsy()
+    })
+
+    test("Should return the first Error when validations fails", () => {
+        const { sut, stubs } = makeSut()
+
+        jest.spyOn(stubs[0],"validate").mockReturnValueOnce(new Error("generic_error"))
+        jest.spyOn(stubs[1],"validate").mockReturnValueOnce(new MissingParamError("any_field"))
+
+        const err = sut.validate({ field: "any_value" })
+
+        expect(err).toEqual(new Error("generic_error"))
+    })
+
 
 })
