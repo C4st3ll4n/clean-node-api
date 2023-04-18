@@ -1,6 +1,5 @@
-import { InvalidParamError, } from "../../errors"
 import { badRequest, created, serverError } from "../../helpers/http-helper"
-import { AddAccount, EmailValidator, HttpRequest, HttpResponse, Controller, Validation } from "./signup-protocols"
+import { AddAccount, HttpRequest, HttpResponse, Controller, Validation } from "./signup-protocols"
 
 export class SignUpController implements Controller {
   private readonly addAccount: AddAccount
