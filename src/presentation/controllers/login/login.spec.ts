@@ -2,7 +2,7 @@ import { InvalidParamError, MissingParamError } from "../../errors"
 import { badRequest, serverError, unauthorized, ok } from "../../helpers/http/http-helper"
 import { Validation } from "../../protocols/validation"
 import { LoginController } from "./login"
-import { HttpRequest, Authentication } from "./login-protocols"
+import { HttpRequest, Authentication, AuthModel } from "./login-protocols"
 
 interface SutTypes {
     sut: LoginController,
@@ -22,7 +22,7 @@ const makeValidation = (): Validation => {
 
 const makeAuth = (): Authentication => {
     class AuthStub implements Authentication {
-        async auth(email: string, password: string): Promise<string> {
+        async auth(email: AuthModel): Promise<string> {
             return new Promise(resolve => resolve("any_token"))
         }
     }
@@ -88,7 +88,7 @@ describe("Login Controller", () => {
         const httpRequest = makeHttpRequest()
 
         sut.handle(httpRequest)
-        expect(isValidSpy).toHaveBeenCalledWith({ email: "valid_email@mail.com", password:"any_password"})
+        expect(isValidSpy).toHaveBeenCalledWith({ email: "valid_email@mail.com", password: "any_password" })
     })
 
     test("Should return 500 if EmailValidator throws", async () => {
@@ -123,7 +123,7 @@ describe("Login Controller", () => {
         const httpRequest = makeHttpRequest()
 
         sut.handle(httpRequest)
-        expect(authSpy).toHaveBeenCalledWith("valid_email@mail.com", "any_password")
+        expect(authSpy).toHaveBeenCalledWith({ email: "valid_email@mail.com", password: "any_password" })
     })
 
     test("Should return 401 if invalid credentials are provided", async () => {
