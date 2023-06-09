@@ -1,10 +1,10 @@
 import {
     AuthModel,
     HashComparer,
-    Encrypter,
     LoadAccountByEmailRepository,
     UpdateAcessTokenRepository,
-    AccountModel
+    AccountModel,
+    Encrypter
 } from "./db-authentication-protocols"
 import { DbAuthentication } from "./db-authentication"
 
