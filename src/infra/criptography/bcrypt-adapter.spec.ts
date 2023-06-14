@@ -1,6 +1,5 @@
 import { BcryptAdapter } from "./bcrypt-adapter"
 import bcrypt from 'bcrypt'
-import { resolve } from "path"
 
 const salt = 12;
 
@@ -49,5 +48,20 @@ describe("Bcrypt Adapter", () => {
         await sut.compare("any_value", "any_hash")
         expect(compareSpy).toHaveBeenCalledWith("any_value", "any_hash")
     })
+    
+    test("Should return success on valid comparison", async () => {
+        const sut = makeSut()
+        const hash = await sut.compare("any_value", "any_hash")
+        expect(hash).toBe(true)
+    })
 
+    /*test("Should throw when compare throws", async () => {
+        const sut = makeSut()
+        jest.spyOn(bcrypt, 'compare').mockImplementationOnce(() => {
+            throw new Error()
+        })
+
+        const promisse = sut.hash("any_value")
+        expect(promisse).rejects.toThrow()
+    })*/
 })
