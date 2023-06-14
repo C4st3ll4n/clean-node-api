@@ -1,7 +1,11 @@
 import jwt from "jsonwebtoken";
 import { JWTAdapter } from "./jwt-adapter";
-import { rejects } from "assert";
 
+jest.mock('jsonwebtoken', () => ({
+    async sign():Promise<string>{
+        return "hashed_token";
+    }
+}))
 
 const makeSut = ():JWTAdapter => {
     const secret = 'secret';
@@ -25,5 +29,11 @@ describe("JWT adapter", ()=> {
         });
         const promise =  sut.encrypt("any_value");
         expect(promise).rejects.toThrow()
+    })
+
+    test('Should return a valid token on sign success', async ()=>{
+        const sut = makeSut();
+        const token = await sut.encrypt("any_id")
+        expect(token).toBe("hashed_token")
     })
 })
