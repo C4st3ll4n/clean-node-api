@@ -3,16 +3,12 @@ import { EmailValidator } from "../../protocols/email-validator";
 import { Validation } from "../../protocols/validation";
 
 export class EmailValidation implements Validation{
-    private readonly fieldName: string
-    private readonly emailValidator: EmailValidator
 
-    constructor(field:string, validator: EmailValidator){
-        this.fieldName = field
-        this.emailValidator = validator
+    constructor(private readonly field:string, private readonly validator: EmailValidator){
     }
 
     validate(input: any): Error {
-        return !this.emailValidator.isValid(input[this.fieldName])?new InvalidParamError(input[this.fieldName]):null
+        return !this.validator.isValid(input[this.field])?new InvalidParamError(input[this.field]):null
     }
 
 }

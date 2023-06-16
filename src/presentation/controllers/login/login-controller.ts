@@ -4,13 +4,7 @@ import { Authentication, Controller, HttpRequest, HttpResponse } from "./login-c
 
 export class LoginController implements Controller {
 
-    private readonly validation: Validation
-    private readonly authentication: Authentication
-
-    constructor(validation: Validation, auth: Authentication) {
-        this.validation = validation
-        this.authentication = auth
-    }
+    constructor(private readonly validation: Validation, private readonly authentication: Authentication) { }
 
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
         try {
@@ -21,7 +15,7 @@ export class LoginController implements Controller {
 
             const { password, email } = httpRequest.body
 
-            const token = await this.authentication.auth({email, password})
+            const token = await this.authentication.auth({ email, password })
 
             if (!token) return unauthorized()
 

@@ -2,15 +2,12 @@ import { MissingParamError } from "../../errors";
 import { Validation } from "../../protocols/validation";
 
 export class RequiredFieldValidation implements Validation{
-    private readonly fieldName: string
-
-    constructor(field:string){
-        this.fieldName = field
+    constructor(private readonly field:string){
     }
 
     validate(input: any): Error {
-        if(!input[this.fieldName]){
-            return new MissingParamError(this.fieldName)
+        if(!input[this.field]){
+            return new MissingParamError(this.field)
         }
     }
 

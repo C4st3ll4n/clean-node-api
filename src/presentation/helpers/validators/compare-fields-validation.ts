@@ -3,18 +3,12 @@ import { Validation } from "../../protocols/validation";
 
 export class CompareFieldsValidation implements Validation{
 
-    constructor(fieldName:string, fieldToCompare:string){
-        this.fieldName = fieldName
-        this.fieldToCompareName = fieldToCompare
+    constructor(private readonly fieldName:string, private readonly fieldToCompare:string){
     }
 
-    private readonly fieldName:string
-
-    private readonly fieldToCompareName:string
-
     validate(input: any): Error {
-        if(input[this.fieldName] !== input[this.fieldToCompareName]){
-            return new InvalidParamError(this.fieldToCompareName)
+        if(input[this.fieldName] !== input[this.fieldToCompare]){
+            return new InvalidParamError(this.fieldToCompare)
         }
     }
 
