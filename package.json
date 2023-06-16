@@ -4,13 +4,15 @@
   "description": "NodeJS REST API using TDD, Clean Arch and Typescript",
   "main": "index.js",
   "scripts": {
+    "start": "node dist/main/server.js",
+    "build": "tsc",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
-    "start": "sucrase-node src/main/server.ts"
+    "dev": "sucrase-node src/main/server.ts"
   },
   "keywords": [],
   "author": "Pedro Henrique",
