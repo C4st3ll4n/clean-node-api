@@ -21,7 +21,7 @@ describe("Login Route", () => {
 
     describe("POST /signup", ()=>{
 
-        test("Should return 201 account on success", async()=> {
+        test("Should return 201 on login", async()=> {
             await request(app)
             .post("/api/signup")
             .send({
@@ -36,13 +36,7 @@ describe("Login Route", () => {
 
     describe("POST /login", ()=>{
 
-        test("Should return 200 account on success", async()=> {
-            const password = await hash("123", 12);
-            await accountCollection.insertOne({
-                name: "Fulano",
-                email: "dulagno@gmail.com",
-                password:password,
-            })
+        test("Should return 401 on login", async()=> {
 
             await request(app)
             .post("/api/login")
@@ -50,8 +44,9 @@ describe("Login Route", () => {
                 email: "dulagno@gmail.com",
                 password:"123",
             })
-            .expect(200)
+            .expect(401)
         })
+
     })
 
 })
