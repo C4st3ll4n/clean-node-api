@@ -1,0 +1,21 @@
+version: '3'
+services:
+  api:
+    build: .
+    container_name: clean-node-api
+    restart: always
+    ports:
+      - '5050:5050'
+    depends_on:
+      - database
+      - redis
+  cache:
+    image: redis
+    command: ["redis-server", "--bind", "redis", "--port", "6379"]
+
+  database:
+    image: mongodb
+    volumes:
+      - ./mongoDB_data:/data
+    ports:
+      - "27017:27017"
