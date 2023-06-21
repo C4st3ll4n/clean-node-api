@@ -1,18 +1,20 @@
 version: '3'
 services:
   api:
-    build: .
     container_name: clean-node-api
-    image: clean-node-api
+    build: .
+  
     restart: always
     ports:
       - '5050:5050'
+      - '9222:9222'
     depends_on:
       - database
 #      - redis
-    command: npm start
+    command: bash -c "npm install --omit=dev && npm start"
     volumes:
-      - ./dist:/usr/src/clean-node-api/dist
+      - ./dist/:/usr/src/clean-node-api/dist/
+      - ./package.json:/usr/src/clean-node-api/package.json
   
   #cache:
   #  image: redis:alpine
