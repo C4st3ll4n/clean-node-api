@@ -1,12 +1,13 @@
 import { SignUpController } from "./signup-controller"
 import { MissingParamError } from "../../errors"
-import { AddAccount, AddAccountModel, AccountModel, HttpRequest, Validation } from "./signup-controller-protocols"
-import { serverError, badRequest, created } from "../../helpers/http/http-helper"
+import { AddAccount, AddAccountModel, AccountModel, HttpRequest, Validation, Authentication, AuthModel } from "./signup-controller-protocols"
+import { serverError, badRequest, created, ok, unauthorized } from "../../helpers/http/http-helper"
 
 interface SutTypes {
     sut: SignUpController,
     addAccountStub: AddAccount,
-    validationStub: Validation
+    validationStub: Validation,
+    authentication: Authentication
 }
 
 const makeValidation = (): Validation => {
@@ -47,16 +48,29 @@ const makeAddAccount = (): AddAccount => {
     return new AddAccountStub()
 }
 
+
+const makeAuth = (): Authentication => {
+    class AuthStub implements Authentication {
+        async auth(email: AuthModel): Promise<string> {
+            return new Promise(resolve => resolve("any_token"))
+        }
+    }
+
+    return new AuthStub()
+}
+
 const makeSut = (): SutTypes => {
 
     const addAccountStub = makeAddAccount()
     const validationStub = makeValidation()
-    const sut = new SignUpController(addAccountStub, validationStub)
+    const authentication = makeAuth()
+    const sut = new SignUpController(addAccountStub, validationStub, authentication)
 
     return {
         sut,
         addAccountStub,
-        validationStub
+        validationStub,
+        authentication
     }
 }
 
@@ -82,7 +96,7 @@ describe("SignUp Controller", () => {
         })
         const httpResponse = await sut.handle(makeHttpRequest())
 
-        expect(httpResponse).toEqual(serverError(Error(null)))
+        expect(httpResponse).toEqual(serverError(Error(undefined)))
 
     })
 
@@ -110,5 +124,38 @@ describe("SignUp Controller", () => {
         const httpResponse = await sut.handle(makeHttpRequest())
 
         expect(httpResponse).toEqual(badRequest(new MissingParamError("any_field")))
+    })
+
+    test("Should call Authentication", async () => {
+        const { sut, authentication } = makeSut()
+        const authSpy = jest.spyOn(authentication, 'auth')
+        const httpRequest = makeHttpRequest()
+
+        await sut.handle(httpRequest)
+        expect(authSpy).toHaveBeenCalledWith({email: "valid_email@mail.com", password: "any_password"})
+    })
+
+    test("Should return 500 if Authentication throws", async () => {
+        const { sut, authentication } = makeSut()
+
+        jest.spyOn(authentication, 'auth').mockImplementationOnce(() => {
+            throw new Error()
+        })
+
+        const httpRequest = makeHttpRequest()
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse).toEqual(serverError(new Error(undefined)))
+    })
+
+    test("Should return 200 when valid credentials are provided", async () => {
+        const { sut } = makeSut()
+
+        const httpRequest = makeHttpRequest()
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse).toEqual(ok({
+            accessToken: "any_token"
+        }))
     })
 })

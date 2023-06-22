@@ -8,7 +8,7 @@
     "debug": "nodemon -L --inspect=0.0.0.0:9222  --nolazy dist/main/server.js",
     "build": "rimraf dist && tsc",
     "up": "npm run build && docker compose up",
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test": "jest --passWithNoTests --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
