@@ -11,7 +11,7 @@ services:
     depends_on:
       - database
 #      - redis
-    command: bash -c "npm install --omit=dev && npm start"
+    command: bash -c "npm install --omit=dev && npm run debug"
     volumes:
       - ./dist/:/usr/src/clean-node-api/dist/
       - ./package.json:/usr/src/clean-node-api/package.json

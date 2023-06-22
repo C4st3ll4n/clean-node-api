@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/main/server.js",
-    "debug": "node --inspect=0.0.0.0:9222  --nolazy dist/main/server.js",
+    "debug": "nodemon -L --inspect=0.0.0.0:9222  --nolazy dist/main/server.js",
     "build": "rimraf dist && tsc",
     "up": "npm run build && docker compose up",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
@@ -17,7 +17,7 @@
     "dev": "node src/main/serve r.ts"
   },
   "keywords": [],
-  "author": "Pedro Henrique", 
+  "author": "Pedro Henrique",
   "license": "ISC",
   "devDependencies": {
     "@shelf/jest-mongodb": "^4.1.4",
@@ -49,10 +49,11 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^3.5.1",
+    "nodemon": "^2.0.22",
     "rimraf": "^5.0.1",
     "validator": "^13.7.0"
   },
   "engines": {
-    "node": "128.X"
+    "node": "18.X"
   }
 }
