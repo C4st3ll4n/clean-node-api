@@ -11,4 +11,5 @@ export const makeDbAuthentication = (): DbAuthentication => {
     const enrypter = new JWTAdapter(env.SECRET);
 
     const auth = new DbAuthentication(mongoAccount, hasherComparer, enrypter, mongoAccount)
+    return auth;
 }

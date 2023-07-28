@@ -1,6 +1,5 @@
-import { MissingParamError } from "../../errors"
 import { CompareFieldsValidation } from "./compare-fields-validation"
-import { InvalidParamError } from "../../errors"
+import { InvalidParamError } from "../presentation/errors"
 
 describe("Compare Field Validation", ()=>{
     test("Should return MissingParamError when validation fails", ()=>{

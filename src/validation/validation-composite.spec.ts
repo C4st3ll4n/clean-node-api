@@ -1,6 +1,6 @@
-import { MissingParamError } from "../../errors"
-import { RequiredFieldValidation } from "./required-field-validation"
-import { Validation } from "../../protocols/validation"
+
+import { Validation } from "../presentation/protocols"
+import { MissingParamError } from "../presentation/errors"
 import { ValidationComposite } from "./validation-composite"
 
 interface SutTypes {
