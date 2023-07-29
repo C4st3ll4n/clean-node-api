@@ -1,7 +1,18 @@
-import { Controller, HttpRequest, HttpResponse, Validation } from "../../../protocols";
+import {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+  Validation,
+} from "../../../protocols";
 import { CreateSurveyController } from "./create-survey-controller";
+import { badRequest} from "../../../helpers/http/http-helper";
 
-const makeValidationStub = ():Validation => {
+interface SUTTypes {
+  sut: Controller;
+  validationStub: Validation;
+}
+
+const makeValidationStub = (): Validation => {
   class ValidationStub implements Validation {
     validate(input: any): Error {
       return null;
@@ -9,7 +20,7 @@ const makeValidationStub = ():Validation => {
   }
 
   return new ValidationStub();
-}
+};
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -18,17 +29,37 @@ const makeFakeRequest = (): HttpRequest => ({
   },
 });
 
+const makeSut = (): SUTTypes => {
+  const validationStub = makeValidationStub();
+  const sut = new CreateSurveyController(validationStub);
+
+  return {
+    sut,
+    validationStub,
+  };
+};
+
 describe("CreateSurvey Controller", () => {
   test("Should call Validation with correct values", async () => {
-    const validationStub = makeValidationStub();
-    const sut = new CreateSurveyController(validationStub);
-    
-    const validateSpy = jest.spyOn(validationStub, "validate")
+    const { sut, validationStub } = makeSut();
+
+    const validateSpy = jest.spyOn(validationStub, "validate");
     const httpRequest = makeFakeRequest();
 
     await sut.handle(httpRequest);
 
-    expect(validateSpy).toBeCalledWith(httpRequest.body)
+    expect(validateSpy).toBeCalledWith(httpRequest.body);
+  });
 
+  test("Should return 400 when Validation fails", async () => {
+    const { sut, validationStub } = makeSut();
+
+    jest.spyOn(validationStub, "validate").mockImplementationOnce(()=>{
+      return new Error("")
+    });
+    const httpRequest = makeFakeRequest();
+
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse).toEqual(badRequest(new Error("")))
   });
 });
