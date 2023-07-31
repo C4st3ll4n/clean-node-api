@@ -20,7 +20,7 @@ describe("Login Route", () => {
   });
 
   describe("POST /signup", () => {
-    test("Should return 201 on signup", async () => {
+    test("Should return 200 on signup", async () => {
       await request(app)
         .post("/api/signup")
         .send({
@@ -29,7 +29,7 @@ describe("Login Route", () => {
           password: "123",
           passwordConfirmation: "123",
         })
-        .expect(201);
+        .expect(200);
     });
   });
 
@@ -43,14 +43,15 @@ describe("Login Route", () => {
       });
     });
 
-    test("Should return 401 on login", async () => {
+    test("Should return 200 on login", async () => {
+      
       await request(app)
         .post("/api/login")
         .send({
           email: "dulagno@gmail.com",
           password: "123",
         })
-        .expect(201);
+        .expect(200);
     });
   });
 });

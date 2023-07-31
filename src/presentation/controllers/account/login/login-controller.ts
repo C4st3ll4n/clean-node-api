@@ -24,6 +24,7 @@ export class LoginController implements Controller {
             })
 
         } catch (err) {
+            console.log(err)
             return serverError(err)
         }
     }
