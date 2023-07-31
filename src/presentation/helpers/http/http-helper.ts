@@ -33,6 +33,6 @@ export const created = (data:any): HttpResponse => ({
 })
 
 export const noContent = (): HttpResponse => ({
-    statusCode: 201,
+    statusCode: 204,
     body: null
 })

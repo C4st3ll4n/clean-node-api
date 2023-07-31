@@ -1,5 +1,5 @@
-import { Survey } from "../models/survey";
+import { SurveyModel } from "../models/survey";
 
 export interface ListSurvey{
-    getAll(): Promise<Survey[]>
+    getAll(): Promise<SurveyModel[]>
 }

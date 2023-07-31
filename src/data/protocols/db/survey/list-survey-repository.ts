@@ -1,5 +1,5 @@
-import { Survey } from "../../../../domain/models/survey";
+import { SurveyModel } from "../../../../domain/models/survey";
 
 export interface ListSurveyRepository{
-    all():Promise<Survey[]>
+    all():Promise<SurveyModel[]>
 }
