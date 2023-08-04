@@ -16,6 +16,10 @@ export default {
     description: "Clean Node Survey API: Create and manage surveys for developers",
     version: "0.0.3",
   },
+  license:{
+    name: "GPL3.0-or-later",
+    url: "opensource.prg/licenses/GPL-3.0"
+  },
   servers: [
     {
       url: "localhost:5050/api",
