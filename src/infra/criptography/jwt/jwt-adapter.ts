@@ -5,11 +5,14 @@ export class JWTAdapter implements Encrypter, Decrypter {
 
     constructor(private readonly secret: string) {
     }
-    decrypt(value: string): Promise<string> {
-        throw new Error("Method not implemented.");
-    }
+    
     async encrypt(value: string): Promise<string> {
         return jwt.sign({ id: value }, this.secret)
+    }
+
+    async decrypt(value: string): Promise<string> {
+        jwt.verify(value, this.secret);
+        return null;
     }
 
 }
