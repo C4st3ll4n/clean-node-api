@@ -54,5 +54,11 @@ describe("JWT adapter", () => {
       const token = await sut.decrypt("any_id");
       expect(token).toBe("unhashed_token");
     });
+
+    test("Should return a valid token on sign success", async () => {
+      const sut = makeSut();
+      const token = await sut.encrypt("any_id");
+      expect(token).toBe("hashed_token");
+    });
   });
 });
