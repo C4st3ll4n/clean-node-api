@@ -41,11 +41,18 @@ describe("JWT adapter", () => {
     });
   });
 
-  describe("Decrypt", ()=>{
+  describe("Decrypt", () => {
     test("Should call verify with correct values", async () => {
       const sut = makeSut();
       const verifySpy = jest.spyOn(jwt, "verify");
       await sut.decrypt("any_token");
       expect(verifySpy).toHaveBeenCalledWith("any_token", "secret");
-    });  })
+    });
+    
+    test("Should return a valid token on verify success", async () => {
+      const sut = makeSut();
+      const token = await sut.decrypt("any_id");
+      expect(token).toBe("unhashed_token");
+    });
+  });
 });
