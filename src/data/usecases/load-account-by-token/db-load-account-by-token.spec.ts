@@ -94,4 +94,10 @@ describe("DB Load Account By Token", () => {
     const promise = await sut.load("any_token");
     expect(promise).toBeNull();
   });
+
+  test("Should return an account on success", async () => {
+    const { sut, repositoryStub } = makeSUT();
+    const account = await sut.load("any_token");
+    expect(account).toEqual(makeFakeAccount())
+  });
 });
