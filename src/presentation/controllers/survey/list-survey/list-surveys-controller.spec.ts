@@ -67,4 +67,14 @@ describe("ListSurveys Controller", () => {
         const promise = await sut.handle({})
         expect(promise).toEqual(serverError(new Error()))
     })
+
+    test("Should return a 404 with survey list empty", async()=>{
+
+        const {sut, listSurveys} = makeSUT()
+        jest.spyOn(listSurveys, "getAll").mockReturnValueOnce(new Promise((resolve, reject) => resolve([])));
+        const listReponse = await sut.handle({})
+
+        expect(listReponse.statusCode).toEqual(404)
+
+    })
 })
