@@ -71,5 +71,13 @@ describe("Account Mongo Repository", () => {
             expect(result.length).toBe(2)
 
         })
+
+        test("Should return a empty list of surveys", async () => {
+
+            const sut = makeSut();
+            const result = await sut.all();
+            expect(result.length).toBe(0)
+
+        })
     })
 });
