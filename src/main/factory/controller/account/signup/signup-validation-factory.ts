@@ -1,11 +1,11 @@
-import { EmailValidatorAdapter } from "@/infra/validator/email-validator-adapter";
-import { CompareFieldsValidation, RequiredFieldValidation, EmailValidation, ValidationComposite } from "@/validation";
-import { Validation } from "@/presentation/protocols";
+import {EmailValidatorAdapter} from "@/infra/validator/email-validator-adapter";
+import {CompareFieldsValidation, EmailValidation, RequiredFieldValidation, ValidationComposite} from "@/validation";
+import {Validation} from "@/presentation/protocols";
 
 export const makeSignUpValidation = (): Validation => {
     const emailValidatorAdapter = new EmailValidatorAdapter()
 
-    const validationComposite = new ValidationComposite(
+    return new ValidationComposite(
         [
             new RequiredFieldValidation("name"),
             new RequiredFieldValidation("email"),
@@ -13,8 +13,6 @@ export const makeSignUpValidation = (): Validation => {
             new RequiredFieldValidation("passwordConfirmation"),
             new CompareFieldsValidation("password", "passwordConfirmation"),
             new EmailValidation("email", emailValidatorAdapter)
-    ]
-    )
-
-    return validationComposite;
+        ]
+    );
 }

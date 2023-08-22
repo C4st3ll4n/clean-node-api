@@ -4,7 +4,6 @@ import {
     forbidden,
     ok,
     serverError,
-    HttpRequest,
     HttpResponse,
     Middleware,
 } from "./auth-middleware-protocols";

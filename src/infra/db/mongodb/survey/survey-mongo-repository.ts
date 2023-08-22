@@ -7,7 +7,7 @@ import {SurveyModel} from "@/domain/models/survey";
 export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRepository {
   async add(data: AddSurveyModel): Promise<void> {
     const surveyCollection = await MongoHelper.getCollection("surveys");
-    const result = await surveyCollection.insertOne(data);
+    await surveyCollection.insertOne(data);
   }
 
   async all(): Promise<SurveyModel[]> {
