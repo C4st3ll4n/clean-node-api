@@ -1,6 +1,6 @@
 import { Answer } from "./answer";
 
-export interface SurveyModel {
+export type SurveyModel = {
   id: string
   question: string;
   answers: Answer[];

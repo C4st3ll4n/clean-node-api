@@ -9,7 +9,7 @@ import {badRequest, noContent, serverError} from "../../../helpers/http/http-hel
 import {AddSurvey, AddSurveyModel} from "./create-survey-protocols";
 import * as mockdate from "mockdate";
 
-interface SUTTypes {
+type SUTTypes ={
     sut: Controller;
     validationStub: Validation;
     addSurveyStub: AddSurvey;

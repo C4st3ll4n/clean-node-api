@@ -5,7 +5,7 @@ import { AuthMiddleware } from "./auth-middleware";
 import { LoadAccountByToken } from "@/domain/usecases/load-account-by-token";
 import { AccountModel } from "@/domain/models/account";
 
-interface SUTTypes {
+type SUTTypes ={
   sut: AuthMiddleware;
   loadAccountTokenStub: LoadAccountByToken;
 }
