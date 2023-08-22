@@ -1,5 +1,5 @@
 import {ListSurveyRepository} from "../../protocols/db/survey/list-survey-repository";
-import {SurveyModel} from "../../../domain/models/survey";
+import {SurveyModel} from "@/domain/models/survey";
 import {DBListSurvey} from "./db-list-survey";
 import * as mockdate from "mockdate";
 
@@ -22,6 +22,12 @@ const makeFakeSurvey = (): SurveyModel => <SurveyModel>({
 const makeRepositoryStub = (): ListSurveyRepository => {
     class ListSurveyRepositoryStub implements ListSurveyRepository {
         async all(): Promise<SurveyModel[]> {
+            return Promise.resolve([
+                makeFakeSurvey()
+            ]);
+        }
+
+        load(accountId: string): Promise<SurveyModel[]> {
             return Promise.resolve([
                 makeFakeSurvey()
             ]);

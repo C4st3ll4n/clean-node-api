@@ -1,6 +1,6 @@
-import {ListSurveyRepository} from "../../../../data/protocols/db/survey/list-survey-repository";
-import {ListSurvey} from "../../../../domain/usecases/list-survey";
-import {SurveyModel} from "../../../../domain/models/survey";
+import {ListSurveyRepository} from "@/data/protocols/db/survey/list-survey-repository";
+import {ListSurvey} from "@/domain/usecases/list-survey";
+import {SurveyModel} from "@/domain/models/survey";
 import {ListSurveysController} from "./list-surveys-controller";
 import * as mockdate from "mockdate";
 import {serverError} from "../../../helpers/http/http-helper";

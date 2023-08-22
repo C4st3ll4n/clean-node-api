@@ -18,3 +18,7 @@ O objetivo é de criar uma API com uma arquitetura bem definida e desacoplada co
 ## Design Patterns aplicados:
 - Factory
 - Adapter
+
+
+## Como roder
+`npm run up` ou `npm run build` e depois `docker compose up`
