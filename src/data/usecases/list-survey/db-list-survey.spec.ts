@@ -51,7 +51,7 @@ describe("DbListSurvey Usecase", () => {
     })
 
     test("Should return a valid list from ListSurveyRepository", async () => {
-        const {sut, repository} = makeSUT()
+        const {sut} = makeSUT()
         const listReponse = await sut.getAll();
         expect(listReponse).toBeTruthy()
         expect(listReponse[0]).toBeTruthy()
