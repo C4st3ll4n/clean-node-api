@@ -1,5 +1,5 @@
-import {ListSurvey} from "../../../domain/usecases/list-survey";
-import {SurveyModel} from "../../../domain/models/survey";
+import {ListSurvey} from "@/domain/usecases/list-survey";
+import {SurveyModel} from "@/domain/models/survey";
 import {ListSurveyRepository} from "../../protocols/db/survey/list-survey-repository";
 
 export class DBListSurvey implements ListSurvey {

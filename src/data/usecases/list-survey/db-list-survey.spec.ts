@@ -26,6 +26,12 @@ const makeRepositoryStub = (): ListSurveyRepository => {
                 makeFakeSurvey()
             ]);
         }
+
+        load(accountId: string): Promise<SurveyModel[]> {
+            return Promise.resolve([
+                makeFakeSurvey()
+            ]);
+        }
     }
 
     return new ListSurveyRepositoryStub();
