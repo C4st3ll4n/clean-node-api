@@ -44,7 +44,15 @@ describe("Login Route", () => {
     });
 
     test("Should return 200 on login", async () => {
-      
+      await request(app)
+          .post("/api/signup")
+          .send({
+            name: "Fulano",
+            email: "dulagno@gmail.com",
+            password: "123",
+            passwordConfirmation: "123",
+          })
+
       await request(app)
         .post("/api/login")
         .send({
