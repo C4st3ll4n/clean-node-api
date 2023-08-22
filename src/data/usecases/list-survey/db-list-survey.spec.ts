@@ -1,6 +1,7 @@
 import {ListSurveyRepository} from "../../protocols/db/survey/list-survey-repository";
 import {SurveyModel} from "../../../domain/models/survey";
 import {DBListSurvey} from "./db-list-survey";
+import * as mockdate from "mockdate";
 
 interface SUTTypes {
     sut: DBListSurvey
@@ -36,11 +37,32 @@ const makeSUT = (): SUTTypes => {
 }
 
 describe("DbListSurvey Usecase", () => {
+
+    beforeAll(() => {
+        mockdate.set(new Date())
+    })
+
     test("Should call ListSurveyRepository correctly", async () => {
         const {sut, repository} = makeSUT()
         const spyRepository = jest.spyOn(repository, "all")
         await sut.getAll();
 
         expect(spyRepository).toHaveBeenCalled()
+    })
+
+    test("Should return a valid list from ListSurveyRepository", async () => {
+        const {sut, repository} = makeSUT()
+        const listReponse = await sut.getAll();
+        expect(listReponse).toBeTruthy()
+        expect(listReponse[0]).toBeTruthy()
+        expect(listReponse[0].id).toEqual("any_id")
+    })
+
+    test("Should throw when ListSurveyRepository throws", () => {
+        const {sut, repository} = makeSUT();
+        jest.spyOn(repository, "all").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+        const result = sut.getAll();
+
+        expect(result).rejects.toThrow()
     })
 })
