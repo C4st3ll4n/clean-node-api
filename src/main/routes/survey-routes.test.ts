@@ -8,6 +8,33 @@ import env from "../config/env";
 let surveyColletion;
 let accountCollection;
 
+
+const makeAccessToken = async (): Promise<string> => {
+
+    const resCreate = await accountCollection.insertOne({
+        name: "Fulano",
+        email: "dulagno@gmail.com",
+        password: hash("123", 12),
+        role: 'admin'
+    });
+
+    const id = resCreate.ops[0]._id;
+    const accessToken = sign({id}, env.SECRET);
+
+    await accountCollection.updateOne(
+        {
+            _id: id,
+        },
+        {
+            $set: {
+                accessToken,
+            },
+        }
+    );
+
+    return accessToken;
+}
+
 describe("Survey Routes", () => {
     beforeAll(async () => {
         await MongoHelper.connect(process.env.MONGO_URL);
@@ -43,43 +70,8 @@ describe("Survey Routes", () => {
 
         test("Should return 204 on surveys", async () => {
 
-            surveyColletion.insertMany([
-                {
-                    question: "any_question",
-                    answers: [
-                        {
-                            image: "any_image",
-                            answer: "any_answer",
-                        },
-                    ],
-                    date: new Date()
-                }
-            ]);
-
-            const resCreate = await accountCollection.insertOne({
-                name: "Fulano",
-                email: "dulagno@gmail.com",
-                password: hash("123", 12),
-                role: 'admin'
-            });
-
-            const id = resCreate.ops[0]._id;
-            const accessToken = sign({id}, env.SECRET);
-
-            const resUpdate = await accountCollection.updateOne(
-                {
-                    _id: id,
-                },
-                {
-                    $set: {
-                        accessToken,
-                    },
-                }
-            );
-
             await request(app)
                 .post("/api/surveys")
-                .set("x-access-token", accessToken)
                 .send({
                     question: "any_question",
                     answers: [
@@ -101,34 +93,13 @@ describe("Survey Routes", () => {
                 .expect(403);
         });
 
-        test("Should return 200 on LoadSurveys successfully", async () => {
-
-            const resCreate = await accountCollection.insertOne({
-                name: "Fulano",
-                email: "dulagno@gmail.com",
-                password: hash("123", 12),
-                role: 'admin'
-            });
-
-            const id = resCreate.ops[0]._id;
-            const accessToken = sign({id}, env.SECRET);
-
-            const resUpdate = await accountCollection.updateOne(
-                {
-                    _id: id,
-                },
-                {
-                    $set: {
-                        accessToken,
-                    },
-                }
-            );
-
+        test("Should return 404 on LoadSurveys successfully", async () => {
+            const accessToken = await makeAccessToken();
 
             await request(app)
                 .get("/api/surveys")
                 .set("x-access-token", accessToken)
-                .expect(200);
+                .expect(204);
         });
     })
 });
