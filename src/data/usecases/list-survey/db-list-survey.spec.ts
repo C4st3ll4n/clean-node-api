@@ -38,8 +38,9 @@ const makeSUT = (): SUTTypes => {
 describe("DbListSurvey Usecase", () => {
     test("Should call ListSurveyRepository correctly", async () => {
         const {sut, repository} = makeSUT()
-        await sut.getAll();
         const spyRepository = jest.spyOn(repository, "all")
+        await sut.getAll();
+
         expect(spyRepository).toHaveBeenCalled()
     })
 })
