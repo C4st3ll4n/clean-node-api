@@ -1,108 +1,115 @@
 import {
-  Controller,
-  HttpRequest,
-  HttpResponse,
-  Validation,
+    Controller,
+    HttpRequest,
+    HttpResponse,
+    Validation,
 } from "../../../protocols";
-import { CreateSurveyController } from "./create-survey-controller";
-import { badRequest, noContent, serverError } from "../../../helpers/http/http-helper";
-import { AddSurvey, AddSurveyModel } from "./create-survey-protocols";
+import {CreateSurveyController} from "./create-survey-controller";
+import {badRequest, noContent, serverError} from "../../../helpers/http/http-helper";
+import {AddSurvey, AddSurveyModel} from "./create-survey-protocols";
+import * as mockdate from "mockdate";
 
 interface SUTTypes {
-  sut: Controller;
-  validationStub: Validation;
-  addSurveyStub: AddSurvey;
+    sut: Controller;
+    validationStub: Validation;
+    addSurveyStub: AddSurvey;
 }
 
 const makeAddSurveyStub = (): AddSurvey => {
-  class AddSurveyStub implements AddSurvey {
-    async add(input: AddSurveyModel): Promise<void> {
-      return new Promise((resolve) => resolve());
+    class AddSurveyStub implements AddSurvey {
+        async add(input: AddSurveyModel): Promise<void> {
+            return new Promise((resolve) => resolve());
+        }
     }
-  }
 
-  return new AddSurveyStub();
+    return new AddSurveyStub();
 };
 
 const makeValidationStub = (): Validation => {
-  class ValidationStub implements Validation {
-    validate(input: any): Error {
-      return null;
+    class ValidationStub implements Validation {
+        validate(input: any): Error {
+            return null;
+        }
     }
-  }
 
-  return new ValidationStub();
+    return new ValidationStub();
 };
 
 const makeFakeRequest = (): HttpRequest => ({
-  body: {
-    question: "any_question",
-    answers: [{ image: "any_image", answer: "any_answer" }],
-  },
+    body: {
+        question: "any_question",
+        answers: [{image: "any_image", answer: "any_answer"}],
+        date: new Date()
+    },
 });
 
 const makeSut = (): SUTTypes => {
-  const validationStub = makeValidationStub();
-  const addSurveyStub = makeAddSurveyStub();
-  const sut = new CreateSurveyController(validationStub, addSurveyStub);
+    const validationStub = makeValidationStub();
+    const addSurveyStub = makeAddSurveyStub();
+    const sut = new CreateSurveyController(validationStub, addSurveyStub);
 
-  return {
-    sut,
-    validationStub,
-    addSurveyStub,
-  };
+    return {
+        sut,
+        validationStub,
+        addSurveyStub,
+    };
 };
 
 describe("CreateSurvey Controller", () => {
-  test("Should call Validation with correct values", async () => {
-    const { sut, validationStub } = makeSut();
 
-    const validateSpy = jest.spyOn(validationStub, "validate");
-    const httpRequest = makeFakeRequest();
+    beforeAll(()=>{
+        mockdate.set(new Date())
+    })
 
-    await sut.handle(httpRequest);
+    test("Should call Validation with correct values", async () => {
+        const {sut, validationStub} = makeSut();
 
-    expect(validateSpy).toBeCalledWith(httpRequest.body);
-  });
+        const validateSpy = jest.spyOn(validationStub, "validate");
+        const httpRequest = makeFakeRequest();
 
-  test("Should return 400 when Validation fails", async () => {
-    const { sut, validationStub } = makeSut();
+        await sut.handle(httpRequest);
 
-    jest.spyOn(validationStub, "validate").mockImplementationOnce(() => {
-      return new Error("");
+        expect(validateSpy).toBeCalledWith(httpRequest.body);
     });
-    const httpRequest = makeFakeRequest();
 
-    const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse).toEqual(badRequest(new Error("")));
-  });
+    test("Should return 400 when Validation fails", async () => {
+        const {sut, validationStub} = makeSut();
 
-  test("Should call AddSurvey with correct values", async () => {
-    const { sut, addSurveyStub } = makeSut();
+        jest.spyOn(validationStub, "validate").mockImplementationOnce(() => {
+            return new Error("");
+        });
+        const httpRequest = makeFakeRequest();
 
-    const addSpy = jest.spyOn(addSurveyStub, "add");
-    const httpRequest = makeFakeRequest();
-
-    await sut.handle(httpRequest);
-
-    expect(addSpy).toBeCalledWith(httpRequest.body);
-  });
-
-  test("Should return 500 when AddSurvey fails", async () => {
-    const { sut, addSurveyStub } = makeSut();
-
-    jest.spyOn(addSurveyStub, "add").mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => reject(new Error()));
+        const httpResponse = await sut.handle(httpRequest);
+        expect(httpResponse).toEqual(badRequest(new Error("")));
     });
-    const httpRequest = makeFakeRequest();
 
-    const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse).toEqual(serverError(new Error()));
-  });
+    test("Should call AddSurvey with correct values", async () => {
+        const {sut, addSurveyStub} = makeSut();
 
-  test("Should return 204 when on success", async () => {
-    const { sut } = makeSut();
-    const httpResponse = await sut.handle(makeFakeRequest());
-    expect(httpResponse).toEqual(noContent());
-  });
+        const addSpy = jest.spyOn(addSurveyStub, "add");
+        const httpRequest = makeFakeRequest();
+
+        await sut.handle(httpRequest);
+
+        expect(addSpy).toBeCalledWith(httpRequest.body);
+    });
+
+    test("Should return 500 when AddSurvey fails", async () => {
+        const {sut, addSurveyStub} = makeSut();
+
+        jest.spyOn(addSurveyStub, "add").mockImplementationOnce(() => {
+            return new Promise((resolve, reject) => reject(new Error()));
+        });
+        const httpRequest = makeFakeRequest();
+
+        const httpResponse = await sut.handle(httpRequest);
+        expect(httpResponse).toEqual(serverError(new Error()));
+    });
+
+    test("Should return 204 when on success", async () => {
+        const {sut} = makeSut();
+        const httpResponse = await sut.handle(makeFakeRequest());
+        expect(httpResponse).toEqual(noContent());
+    });
 });
