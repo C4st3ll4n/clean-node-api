@@ -5,7 +5,7 @@ import {ListSurveysController} from "./list-surveys-controller";
 import * as mockdate from "mockdate";
 import {serverError} from "../../../helpers/http/http-helper";
 
-interface SUTTYpes {
+type SUTTYpes ={
     sut: ListSurveysController,
     listSurveys: ListSurvey
 }
