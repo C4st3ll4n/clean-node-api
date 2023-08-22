@@ -88,8 +88,31 @@ describe("Survey Routes", () => {
     });
 
     test("Should return 200 on LoadSurveys successfully", async()=>{
+
+      const resCreate = await accountCollection.insertOne({
+        name: "Fulano",
+        email: "dulagno@gmail.com",
+        password: hash("123", 12),
+        role: 'admin'
+      });
+
+      const id = resCreate.ops[0]._id;
+      const accessToken = sign({ id }, env.SECRET);
+
+      const resUpdate = await accountCollection.updateOne(
+          {
+            _id: id,
+          },
+          {
+            $set: {
+              accessToken,
+            },
+          }
+      );
+
       await request(app)
           .get("/api/surveys")
+          .set("x-access-token", accessToken)
           .expect(200);
     });
   })
