@@ -16,7 +16,7 @@ export const adaptMiddleware = (middlewares: Middleware) => {
     } else {
       res
         .status(httpResponse.statusCode)
-        .json({ error: httpResponse.body.message });
+        .json({ error: httpResponse.body });
     }
   };
 };
