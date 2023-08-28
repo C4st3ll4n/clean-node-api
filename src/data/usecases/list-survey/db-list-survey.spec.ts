@@ -86,7 +86,16 @@ describe("DbListSurvey Usecase", () => {
             const spyRepository = jest.spyOn(repository, "loadById")
             await sut.loadById("any_id");
 
-        expect(result).rejects.toThrow()
+            expect(spyRepository).toHaveBeenCalled()
+        })
+
+        test("Should return a valid survey", async () => {
+            const {sut} = makeSUT()
+            const response = await sut.loadById("any_id");
+            expect(response).toBeTruthy()
+            expect(response.id).toBeTruthy()
+            expect(response.id).toEqual("any_id")
+        })
     })
 
 })
