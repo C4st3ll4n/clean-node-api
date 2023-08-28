@@ -11,8 +11,8 @@ type SUTTypes = {
 
 const makeDecrypterStub = (): Decrypter => {
     class DecrypterStub implements Decrypter {
-        decrypt(value: string): Promise<string> {
-            return new Promise((resolve) => resolve("any_token"));
+        decrypt(value: string): Promise<object> {
+            return new Promise((resolve) => resolve({id:"any_token"}));
         }
     }
 
