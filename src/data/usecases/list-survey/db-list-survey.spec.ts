@@ -52,20 +52,31 @@ describe("DbListSurvey Usecase", () => {
         mockdate.set(new Date())
     })
 
-    test("Should call ListSurveyRepository correctly", async () => {
-        const {sut, repository} = makeSUT()
-        const spyRepository = jest.spyOn(repository, "all")
-        await sut.getAll();
+    describe("ListSurveys", ()=>{
 
-        expect(spyRepository).toHaveBeenCalled()
-    })
+        test("Should call ListSurveyRepository correctly", async () => {
+            const {sut, repository} = makeSUT()
+            const spyRepository = jest.spyOn(repository, "all")
+            await sut.getAll();
 
-    test("Should return a valid list from ListSurveyRepository", async () => {
-        const {sut} = makeSUT()
-        const listReponse = await sut.getAll();
-        expect(listReponse).toBeTruthy()
-        expect(listReponse[0]).toBeTruthy()
-        expect(listReponse[0].id).toEqual("any_id")
+            expect(spyRepository).toHaveBeenCalled()
+        })
+
+        test("Should return a valid list from ListSurveyRepository", async () => {
+            const {sut} = makeSUT()
+            const listReponse = await sut.getAll();
+            expect(listReponse).toBeTruthy()
+            expect(listReponse[0]).toBeTruthy()
+            expect(listReponse[0].id).toEqual("any_id")
+        })
+
+        test("Should throw when ListSurveyRepository throws", () => {
+            const {sut, repository} = makeSUT();
+            jest.spyOn(repository, "all").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+            const result = sut.getAll();
+
+            expect(result).rejects.toThrow()
+        })
     })
 
     test("Should throw when ListSurveyRepository throws", () => {
