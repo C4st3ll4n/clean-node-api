@@ -96,6 +96,15 @@ describe("DbListSurvey Usecase", () => {
             expect(response.id).toBeTruthy()
             expect(response.id).toEqual("any_id")
         })
+
+
+        test("Should throw when LoadSurveyById throws", () => {
+            const {sut, repository} = makeSUT();
+            jest.spyOn(repository, "loadById").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+            const result = sut.loadById("any_id");
+
+            expect(result).rejects.toThrow()
+        })
     })
 
 })
