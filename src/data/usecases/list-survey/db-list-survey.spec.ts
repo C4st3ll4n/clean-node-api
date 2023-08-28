@@ -79,11 +79,14 @@ describe("DbListSurvey Usecase", () => {
         })
     })
 
-    test("Should throw when ListSurveyRepository throws", () => {
-        const {sut, repository} = makeSUT();
-        jest.spyOn(repository, "all").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
-        const result = sut.getAll();
+    describe("LoadSurveyById", ()=>{
+
+        test("Should call LoadSurveyById correctly", async () => {
+            const {sut, repository} = makeSUT()
+            const spyRepository = jest.spyOn(repository, "loadById")
+            await sut.loadById("any_id");
 
         expect(result).rejects.toThrow()
     })
+
 })
