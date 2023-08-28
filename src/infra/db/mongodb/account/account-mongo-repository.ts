@@ -5,6 +5,7 @@ import { AccountModel } from "@/domain/models/account";
 import { AddAccountModel } from "@/domain/usecases/add-account";
 import { LoadAccountByToken } from "@/domain/usecases/load-account-by-token";
 import { MongoHelper } from "../helpers/mongo-helper";
+const ObjectId = require("mongodb").ObjectId;
 
 export class AccountMongoRepository
   implements
@@ -52,7 +53,7 @@ export class AccountMongoRepository
     const accountCollection = await MongoHelper.getCollection("accounts");
     await accountCollection.updateOne(
       {
-        _id: identifier,
+        _id: new ObjectId(identifier),
       },
       {
         $set: {
