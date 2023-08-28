@@ -3,7 +3,7 @@ import {SurveyModel} from "@/domain/models/survey";
 import {DBListSurvey} from "./db-list-survey";
 import * as mockdate from "mockdate";
 
-type SUTTypes ={
+type SUTTypes = {
     sut: DBListSurvey
     repository: ListSurveyRepository
 }
@@ -31,6 +31,10 @@ const makeRepositoryStub = (): ListSurveyRepository => {
             return Promise.resolve([
                 makeFakeSurvey()
             ]);
+        }
+
+        loadById(surveyId: string): Promise<SurveyModel> {
+            return Promise.resolve(makeFakeSurvey());
         }
     }
 
