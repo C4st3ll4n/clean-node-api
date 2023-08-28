@@ -95,7 +95,7 @@ describe("DB Load Account By Token", () => {
     });
 
     test("Should return an account on success", async () => {
-        const {sut, repositoryStub} = makeSUT();
+        const {sut} = makeSUT();
         const account = await sut.loadByToken("any_token");
         expect(account).toEqual(makeFakeAccount())
     });
