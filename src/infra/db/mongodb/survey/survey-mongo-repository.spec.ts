@@ -1,10 +1,29 @@
 import {MongoHelper} from "../helpers/mongo-helper";
 import {SurveyMongoRepository} from "./survey-mongo-repository";
 import {Collection} from "mongodb";
+import {SurveyModel} from "@/domain/models/survey";
 
 const makeSut = (): SurveyMongoRepository => {
     return new SurveyMongoRepository();
 };
+
+const makeSurvey = async (): Promise<SurveyModel> => {
+    const res = await surveyCollection.insertOne({
+        question: "any_question",
+        answers: [
+            {image: "any_image", answer: "any_answer"},
+            {image: "any_other_image", answer: "any_other_answer"}
+        ],
+        date: new Date()
+    })
+    const survey = res.ops[0];
+    return  {
+        id: survey._id,
+        answers: survey.answers,
+        date: survey.date,
+        question: survey.question
+    }
+}
 
 let surveyCollection: Collection;
 
@@ -44,8 +63,8 @@ describe("Survey Mongo Repository", () => {
         });
     })
 
-    describe("ListSurvey", ()=>{
-        describe("all", ()=>{
+    describe("ListSurvey", () => {
+        describe("all", () => {
             test("Should return a list of surveys", async () => {
 
                 const sut = makeSut();
@@ -70,11 +89,10 @@ describe("Survey Mongo Repository", () => {
 
                 const result = await sut.all();
                 expect(result.length).toBe(2)
-
+                expect(result[0].id).toBeTruthy()
             })
 
             test("Should return a empty list of surveys", async () => {
-
                 const sut = makeSut();
                 const result = await sut.all();
                 expect(result.length).toBe(0)
@@ -82,31 +100,18 @@ describe("Survey Mongo Repository", () => {
             })
         })
 
-        describe("by survey id", ()=>{
+        describe("by survey id", () => {
             test("Should return a survey", async () => {
-
                 const sut = makeSut();
-
-
-                await sut.add({
-                    question: "other_question",
-                    answers: [
-                        {image: "other_image", answer: "other_answer"},
-                    ],
-                    date: new Date()
-                });
-
-
-                const result = await sut.loadById("any_id");
-                expect(result.id).toBe("any_id")
-
+                const createdSurvey = await makeSurvey();
+                const result = await sut.loadById(createdSurvey.id);
+                expect(result.id).toEqual(createdSurvey.id)
             })
 
             test("Should return null", async () => {
-
                 const sut = makeSut();
                 const result = await sut.loadById("any_id");
-                expect(result.id).toBe("any_id")
+                expect(result).toBeNull()
 
             })
         })
