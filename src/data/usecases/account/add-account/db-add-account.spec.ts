@@ -17,7 +17,6 @@ type SutTypes = {
 const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
     class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
         async loadByEmail(email: string): Promise<AccountModel> {
-            const fakeAccount = makeFakeAccount()
             return new Promise(resolve => resolve(null))
         }
     }

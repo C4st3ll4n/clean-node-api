@@ -1,4 +1,3 @@
-import {ListSurveyRepository} from "@/data/protocols/db/survey/list-survey-repository";
 import {ListSurvey} from "@/domain/usecases/survey/list-survey";
 import {SurveyModel} from "@/domain/models/survey";
 import {ListSurveysController} from "./list-surveys-controller";
@@ -51,7 +50,7 @@ describe("ListSurveys Controller", () => {
 
     test("Should return a valid 200 with survey list", async()=>{
 
-        const {sut, listSurveys} = makeSUT()
+        const {sut} = makeSUT()
         const listReponse = await sut.handle({})
 
         expect(listReponse.statusCode).toEqual(200)
@@ -63,7 +62,7 @@ describe("ListSurveys Controller", () => {
 
     test("Should return 500 when ListSurvey throws", async () => {
         const {sut, listSurveys} = makeSUT()
-        jest.spyOn(listSurveys, "getAll").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+        jest.spyOn(listSurveys, "getAll").mockReturnValueOnce(new Promise((_resolve, reject) => reject(new Error())));
         const promise = await sut.handle({})
         expect(promise).toEqual(serverError(new Error()))
     })
@@ -71,7 +70,7 @@ describe("ListSurveys Controller", () => {
     test("Should return a 404 with survey list empty", async()=>{
 
         const {sut, listSurveys} = makeSUT()
-        jest.spyOn(listSurveys, "getAll").mockReturnValueOnce(new Promise((resolve, reject) => resolve([])));
+        jest.spyOn(listSurveys, "getAll").mockReturnValueOnce(new Promise((resolve) => resolve([])));
         const listReponse = await sut.handle({})
 
         expect(listReponse.statusCode).toEqual(404)

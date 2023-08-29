@@ -52,7 +52,7 @@ describe("Auth Middleware", () => {
     const { sut, loadAccountTokenStub } = makeSUT(role);
     const loadSpy = jest.spyOn(loadAccountTokenStub, "loadByToken");
 
-    const httpResponse = await sut.handle(makeFakeRequest());
+    await sut.handle(makeFakeRequest());
 
     expect(loadSpy).toHaveBeenCalledWith("any_token", role);
   });
