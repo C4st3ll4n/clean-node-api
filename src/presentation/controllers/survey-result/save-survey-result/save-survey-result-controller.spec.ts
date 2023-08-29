@@ -4,6 +4,7 @@ import {
 import {HttpRequest} from "@/presentation/protocols";
 import {LoadSurveyById} from "@/domain/usecases/survey/load-survey-by-id";
 import {SurveyModel} from "@/domain/models/survey";
+import {serverError} from "@/presentation/helpers/http/http-helper";
 
 type SUTTypes = {
     sut: SaveSurveyResultController,
@@ -59,5 +60,13 @@ describe("Save SurveyResult Controller", ()=>{
         jest.spyOn(loadSurveyStub, "loadById").mockReturnValueOnce(null)
         const response = await sut.handle(makeRequest())
         expect(response.statusCode).toEqual(403)
+    })
+
+    test("should return 500 when LoadSurveyById throws", async () => {
+        const { sut, loadSurveyStub } = makeSut();
+        jest.spyOn(loadSurveyStub, "loadById").mockReturnValueOnce(new  Promise((_,reject)=> reject(new Error())));
+
+        const httpResponse = await sut.handle(makeRequest());
+        expect(httpResponse).toEqual(serverError(new Error()));
     })
 })
