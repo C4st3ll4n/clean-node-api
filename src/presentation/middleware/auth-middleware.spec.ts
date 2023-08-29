@@ -10,8 +10,10 @@ type SUTTypes ={
   loadAccountTokenStub: LoadAccountByToken;
 }
 
-const makeFakeRequest = (): AuthMiddleware.Request => ({
-  token: "any_token",
+const makeFakeRequest = (): HttpRequest => ({
+  headers:{
+    "x-access-token": "any_token"
+  }
 });
 
 const makeFakeAccount = (): AccountModel => ({
