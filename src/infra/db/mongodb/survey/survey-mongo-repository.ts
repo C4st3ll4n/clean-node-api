@@ -18,4 +18,8 @@ export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRep
   load(accountId: string): Promise<SurveyModel[]> {
     return Promise.resolve([]);
   }
+
+  loadById(surveyId: string): Promise<SurveyModel> {
+    return Promise.resolve(undefined);
+  }
 }

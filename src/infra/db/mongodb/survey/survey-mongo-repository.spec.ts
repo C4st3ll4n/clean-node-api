@@ -79,5 +79,36 @@ describe("Account Mongo Repository", () => {
             expect(result.length).toBe(0)
 
         })
+
+
+
+        describe("by survey id", ()=>{
+            test("Should return a list of surveys", async () => {
+
+                const sut = makeSut();
+
+
+                await sut.add({
+                    question: "other_question",
+                    answers: [
+                        {image: "other_image", answer: "other_answer"},
+                    ],
+                    date: new Date()
+                });
+
+
+                const result = await sut.loadById("any_id");
+                expect(result.id).toBe("any_id")
+
+            })
+
+            test("Should return null", async () => {
+
+                const sut = makeSut();
+                const result = await sut.loadById("any_id");
+                expect(result.id).toBe("any_id")
+
+            })
+        })
     })
 });
