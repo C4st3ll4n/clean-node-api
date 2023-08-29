@@ -1,4 +1,4 @@
-import {ListSurveyRepository} from "../../protocols/db/survey/list-survey-repository";
+import {ListSurveyRepository} from "../../../protocols/db/survey/list-survey-repository";
 import {SurveyModel} from "@/domain/models/survey";
 import {DBListSurvey} from "./db-list-survey";
 import * as mockdate from "mockdate";
