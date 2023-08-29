@@ -45,39 +45,41 @@ describe("Account Mongo Repository", () => {
     })
 
     describe("ListSurvey", ()=>{
-        test("Should return a list of surveys", async () => {
+        describe("all", ()=>{
+            test("Should return a list of surveys", async () => {
 
-            const sut = makeSut();
+                const sut = makeSut();
 
-            await sut.add({
-                question: "any_question",
-                answers: [
-                    {image: "any_image", answer: "any_answer"},
-                    {image: "any_other_image", answer: "any_other_answer"}
-                ],
-                date: new Date()
-            });
+                await sut.add({
+                    question: "any_question",
+                    answers: [
+                        {image: "any_image", answer: "any_answer"},
+                        {image: "any_other_image", answer: "any_other_answer"}
+                    ],
+                    date: new Date()
+                });
 
-            await sut.add({
-                question: "other_question",
-                answers: [
-                    {image: "other_image", answer: "other_answer"},
-                ],
-                date: new Date()
-            });
+                await sut.add({
+                    question: "other_question",
+                    answers: [
+                        {image: "other_image", answer: "other_answer"},
+                    ],
+                    date: new Date()
+                });
 
 
-            const result = await sut.all();
-            expect(result.length).toBe(2)
+                const result = await sut.all();
+                expect(result.length).toBe(2)
 
-        })
+            })
 
-        test("Should return a empty list of surveys", async () => {
+            test("Should return a empty list of surveys", async () => {
 
-            const sut = makeSut();
-            const result = await sut.all();
-            expect(result.length).toBe(0)
+                const sut = makeSut();
+                const result = await sut.all();
+                expect(result.length).toBe(0)
 
+            })
         })
 
 
