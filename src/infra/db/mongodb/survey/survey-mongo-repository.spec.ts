@@ -82,10 +82,8 @@ describe("Survey Mongo Repository", () => {
             })
         })
 
-
-
         describe("by survey id", ()=>{
-            test("Should return a list of surveys", async () => {
+            test("Should return a survey", async () => {
 
                 const sut = makeSut();
 
