@@ -4,6 +4,7 @@ import {SurveyResultMongoRepository} from "@/infra/db/mongodb/survey-result/surv
 import {SurveyModel} from "@/domain/models/survey";
 import {AccountModel} from "@/domain/models/account";
 import {hash} from "bcrypt";
+import {SurveyResultModel} from "@/domain/models/survey-result";
 
 const makeSut = (): SurveyResultMongoRepository => {
     return new SurveyResultMongoRepository();
@@ -42,6 +43,23 @@ const makeAccount = async (): Promise<AccountModel> => {
         password: account.password,
     };
 }
+const makeSurveyResult = async (accountId: string, surveyId: string): Promise<SurveyResultModel> => {
+    const res = await surveyResultCollection.insertOne({
+        answer: "any_answer",
+        date: new Date(),
+        surveyId: surveyId,
+        accountId: accountId
+    });
+    const surveyResult = res.ops[0];
+    return {
+        id: surveyResult._id,
+        answer: surveyResult.answer,
+        accountId: surveyResult.accountId,
+        date: surveyResult.date,
+        surveyId: surveyResult.surveyId
+    }
+}
+
 let surveyCollection: Collection;
 let surveyResultCollection: Collection;
 let accountCollection: Collection;
@@ -81,6 +99,25 @@ describe("Survey Result Mongo Repository", () => {
             expect(surveyResult).toBeTruthy();
             expect(surveyResult.id).toBeTruthy();
             expect(surveyResult.answer).toEqual(survey.answers[0].answer);
+        });
+
+        test("Should update a survey result", async () => {
+            const survey = await makeSurvey();
+            const account = await makeAccount();
+            const createdSurveyResult = await makeSurveyResult(account.id,survey.id )
+
+            const sut = makeSut();
+
+            const updatedSurveyResult = await sut.save({
+                accountId: account.id,
+                answer: survey.answers[1].answer,
+                date: new Date(),
+                surveyId: survey.id
+            });
+
+            expect(updatedSurveyResult).toBeTruthy();
+            expect(updatedSurveyResult.id).toEqual(createdSurveyResult.id);
+            expect(updatedSurveyResult.answer).toEqual("any_other_answer");
         });
     })
 });
