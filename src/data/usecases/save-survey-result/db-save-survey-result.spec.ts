@@ -11,7 +11,7 @@ type SUTTypes = {
 
 const makeSaveSurveyResultRepositoryStub = (): SaveSurveyResultRepository => {
     class SaveSurveyResultRepositoryStub implements SaveSurveyResultRepository {
-        add(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+        save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
             return Promise.resolve(makeFakeSurvey());
         }
     }
@@ -41,7 +41,7 @@ describe("DB Save Survey Result", () => {
 
     test("Should call repository correctly", async () => {
         const {sut, repository} = makeSUT();
-        const spyRepository = jest.spyOn(repository, "add")
+        const spyRepository = jest.spyOn(repository, "save")
         await sut.save({
             accountId: "any_account",
             date: new Date(),
@@ -58,7 +58,7 @@ describe("DB Save Survey Result", () => {
     })
     test("Should throw when repository throws", async () => {
         const {sut, repository} = makeSUT();
-        jest.spyOn(repository, "add").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+        jest.spyOn(repository, "save").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
         const result = sut.save({
             accountId: "any_account",
             date: new Date(),
