@@ -1,6 +1,6 @@
 import {DbSaveSurveyResult} from "@/data/usecases/survey-result/save-survey-result/db-save-survey-result";
 import {SaveSurveyResultRepository} from "@/data/protocols/db/survey-result/save-survey-result-repository";
-import {SaveSurveyResultModel} from "@/domain/usecases/survey-result/save-survey-result";
+import {SaveSurveyResultParam} from "@/domain/usecases/survey-result/save-survey-result";
 import {SurveyResultModel} from "@/domain/models/survey-result";
 import mockdate from "mockdate";
 
@@ -11,7 +11,7 @@ type SUTTypes = {
 
 const makeSaveSurveyResultRepositoryStub = (): SaveSurveyResultRepository => {
     class SaveSurveyResultRepositoryStub implements SaveSurveyResultRepository {
-        save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+        save(data: SaveSurveyResultParam): Promise<SurveyResultModel> {
             return Promise.resolve(makeFakeSurvey());
         }
     }
