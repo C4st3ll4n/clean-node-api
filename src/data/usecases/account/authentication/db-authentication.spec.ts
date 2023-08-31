@@ -1,5 +1,5 @@
 import {
-    AuthModel,
+    AuthParam,
     HashComparer,
     LoadAccountByEmailRepository,
     UpdateAcessTokenRepository,
@@ -62,7 +62,7 @@ const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
     return new LoadAccountByEmailRepositoryStub()
 }
 
-const makeFakeAuth = (): AuthModel => ({
+const makeFakeAuth = (): AuthParam => ({
     email: "valid_email",
     password: "valid_password"
 })

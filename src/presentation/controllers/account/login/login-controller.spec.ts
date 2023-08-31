@@ -2,7 +2,7 @@ import { InvalidParamError, MissingParamError } from "../../../errors"
 import { badRequest, serverError, unauthorized, ok } from "../../../helpers/http/http-helper"
 import { Validation } from "../../../protocols"
 import { LoginController } from "./login-controller"
-import { HttpRequest, Authentication, AuthModel } from "./login-controller-protocols"
+import { HttpRequest, Authentication, AuthParam } from "./login-controller-protocols"
 
 type SutTypes ={
     sut: LoginController,
@@ -22,7 +22,7 @@ const makeValidation = (): Validation => {
 
 const makeAuth = (): Authentication => {
     class AuthStub implements Authentication {
-        async auth(email: AuthModel): Promise<string> {
+        async auth(email: AuthParam): Promise<string> {
             return new Promise(resolve => resolve("any_token"))
         }
     }
