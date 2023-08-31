@@ -24,6 +24,16 @@ export class SaveSurveyResultController implements Controller{
                 if (!answers.includes(answer)) {
                     return badRequest(new InvalidParamError("answer"));
                 }
+                const saveSurveyResult = await this.saveResult.save({
+                    surveyId:surveyId,
+                    answer:answer,
+                    date: new Date(),
+                    accountId: httpRequest.accountId
+                })
+
+                if(!saveSurveyResult){
+                    return badRequest(new Error("Something went wrong, try again later."))
+                }
             } else {
                 return forbidden(new InvalidParamError("surveyId"));
             }
