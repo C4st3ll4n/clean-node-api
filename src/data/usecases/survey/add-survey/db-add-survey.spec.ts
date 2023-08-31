@@ -1,4 +1,4 @@
-import { AddSurveyModel, AddSurveyRepository } from "./db-add-survey-protocols";
+import { AddSurveyParam, AddSurveyRepository } from "./db-add-survey-protocols";
 import { DbAddSurvey } from "./db-add-survey";
 import * as mockdate from "mockdate";
 type SUTTypes = {
@@ -6,7 +6,7 @@ type SUTTypes = {
   addSurveyRepository: AddSurveyRepository;
 }
 
-const makeFakeSurvey = (): AddSurveyModel => ({
+const makeFakeSurvey = (): AddSurveyParam => ({
   question: "any_question",
   answers: [
     {
