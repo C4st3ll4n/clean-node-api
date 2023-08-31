@@ -1,5 +1,5 @@
 import {Controller, HttpRequest, HttpResponse} from "../../../protocols";
-import {ListSurvey} from "@/domain/usecases/list-survey";
+import {ListSurvey} from "@/domain/usecases/survey/list-survey";
 import {notFound, ok, serverError} from "../../../helpers/http/http-helper";
 
 export class ListSurveysController implements Controller {

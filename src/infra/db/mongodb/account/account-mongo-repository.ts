@@ -2,8 +2,8 @@ import {AddAccountRepository} from "@/data/protocols/db/account/add-account-repo
 import {LoadAccountByEmailRepository} from "@/data/protocols/db/account/load-account-by-email-repository";
 import {UpdateAcessTokenRepository} from "@/data/protocols/db/account/update-access-token-repository";
 import {AccountModel} from "@/domain/models/account";
-import {AddAccountModel} from "@/domain/usecases/add-account";
-import {LoadAccountByToken} from "@/domain/usecases/load-account-by-token";
+import {AddAccountModel} from "@/domain/usecases/account/add-account";
+import {LoadAccountByToken} from "@/domain/usecases/account/load-account-by-token";
 import {MongoHelper} from "../helpers/mongo-helper";
 
 const ObjectId = require("mongodb").ObjectId;

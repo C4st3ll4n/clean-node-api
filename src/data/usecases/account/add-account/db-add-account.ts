@@ -1,9 +1,9 @@
 import {
-  AddAccount,
   AccountModel,
+  AddAccount,
   AddAccountModel,
-  Hasher,
   AddAccountRepository,
+  Hasher,
   LoadAccountByEmailRepository,
 } from "./db-add-account-protocols";
 
@@ -20,11 +20,9 @@ export class DbAddAccount implements AddAccount {
     );
     if (!account) {
       const encryptedPassword = await this.hasher.hash(accountData.password);
-      const newAccount = await this.addAccountRepository.add(
-        Object.assign({}, accountData, { password: encryptedPassword })
+      return await this.addAccountRepository.add(
+          Object.assign({}, accountData, {password: encryptedPassword})
       );
-
-      return newAccount;
     }
 
     return null;

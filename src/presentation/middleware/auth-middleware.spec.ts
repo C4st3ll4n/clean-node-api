@@ -2,7 +2,7 @@ import { HttpRequest } from "../protocols";
 import { forbidden, ok, serverError } from "../helpers/http/http-helper";
 import { AccessDeniedError } from "../errors";
 import { AuthMiddleware } from "./auth-middleware";
-import { LoadAccountByToken } from "@/domain/usecases/load-account-by-token";
+import { LoadAccountByToken } from "@/domain/usecases/account/load-account-by-token";
 import { AccountModel } from "@/domain/models/account";
 
 type SUTTypes ={
@@ -10,8 +10,10 @@ type SUTTypes ={
   loadAccountTokenStub: LoadAccountByToken;
 }
 
-const makeFakeRequest = (): AuthMiddleware.Request => ({
-  token: "any_token",
+const makeFakeRequest = (): HttpRequest => ({
+  headers:{
+    "x-access-token": "any_token"
+  }
 });
 
 const makeFakeAccount = (): AccountModel => ({
@@ -50,7 +52,7 @@ describe("Auth Middleware", () => {
     const { sut, loadAccountTokenStub } = makeSUT(role);
     const loadSpy = jest.spyOn(loadAccountTokenStub, "loadByToken");
 
-    const httpResponse = await sut.handle(makeFakeRequest());
+    await sut.handle(makeFakeRequest());
 
     expect(loadSpy).toHaveBeenCalledWith("any_token", role);
   });
