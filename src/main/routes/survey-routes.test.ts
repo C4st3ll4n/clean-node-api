@@ -99,7 +99,6 @@ describe("Survey Routes", () => {
 
         test("Should return 404 on LoadSurveys successfully", async () => {
             const accessToken = await makeAccessToken();
-            console.log(`accessToken =: ${accessToken}`)
             await request(app)
                 .get("/api/surveys")
                 .set("x-access-token", accessToken)

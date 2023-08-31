@@ -21,7 +21,6 @@ const makeSurvey = async (): Promise<SurveyModel> => {
         date: new Date()
     })
     const survey = res.ops[0];
-    console.log(`created survey => ${survey._id}`)
     return  {
         id: survey._id,
         answers: survey.answers,
@@ -84,7 +83,6 @@ describe("Survey Result Routes", () => {
         test("Should return 200 on save survey result success", async () => {
             const accessToken = await makeAccessToken();
             const survey = await makeSurvey();
-            console.log(survey);
             await request(app)
                 .put(`/api/surveys/${survey.id}/results`)
                 .set("x-access-token", accessToken)
