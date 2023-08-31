@@ -1,6 +1,6 @@
 import { SignUpController } from "./signup-controller"
 import { EmailInUseError, MissingParamError } from "../../../errors"
-import { AddAccount, AddAccountModel, AccountModel, HttpRequest, Validation, Authentication, AuthModel } from "./signup-controller-protocols"
+import { AddAccount, AddAccountParam, AccountModel, HttpRequest, Validation, Authentication, AuthModel } from "./signup-controller-protocols"
 import { serverError, badRequest, created, ok, unauthorized, forbidden } from "../../../helpers/http/http-helper"
 
 type SutTypes ={
@@ -40,7 +40,7 @@ const makeAccountModel = (): AccountModel => (
 
 const makeAddAccount = (): AddAccount => {
     class AddAccountStub implements AddAccount {
-        async add(account: AddAccountModel): Promise<AccountModel> {
+        async add(account: AddAccountParam): Promise<AccountModel> {
             return new Promise(resolve => resolve(makeAccountModel()))
         }
     }
