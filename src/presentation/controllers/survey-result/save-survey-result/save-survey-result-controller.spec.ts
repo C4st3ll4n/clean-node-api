@@ -10,6 +10,7 @@ import {SurveyResultModel} from "@/domain/models/survey-result";
 import {InvalidParamError} from "@/presentation/errors";
 import {LoadAccountByToken} from "@/domain/usecases/account/load-account-by-token";
 import {AccountModel} from "@/domain/models/account";
+import mockdate from "mockdate";
 
 type SUTTypes = {
     sut: SaveSurveyResultController,
@@ -88,10 +89,16 @@ const makeRequest = ():HttpRequest => {
         },
         body: {
             answer: "any_answer"
-        }
+        },
+        accountId: "any_account_id"
     };
 };
 describe("Save SurveyResult Controller", ()=>{
+
+    beforeAll(()=>{
+        mockdate.set(new Date())
+    })
+
     describe("LoadSurveyById", () => {
         test("should call LoadSurveyById correctly", async () => {
             const {sut, loadSurveyStub} = makeSut();
@@ -134,7 +141,7 @@ describe("Save SurveyResult Controller", ()=>{
             const {sut, saveSurveyResult} = makeSut();
             jest.spyOn(saveSurveyResult, "save").mockReturnValueOnce(null)
             const response = await sut.handle(makeRequest())
-            expect(response.statusCode).toEqual(403)
+            expect(response.statusCode).toEqual(400)
         })
 
         test("should return 500 when SaveSurveyResult throws", async () => {
