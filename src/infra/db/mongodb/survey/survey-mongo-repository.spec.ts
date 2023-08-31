@@ -110,7 +110,7 @@ describe("Survey Mongo Repository", () => {
 
             test("Should return null", async () => {
                 const sut = makeSut();
-                const result = await sut.loadById("any_id");
+                const result = await sut.loadById("528ad922df454bf6b51b007f");
                 expect(result).toBeNull()
 
             })
