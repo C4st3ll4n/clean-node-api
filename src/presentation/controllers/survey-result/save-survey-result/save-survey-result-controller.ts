@@ -1,6 +1,6 @@
 import {Controller, HttpRequest, HttpResponse} from "@/presentation/protocols";
 import {LoadSurveyById} from "@/domain/usecases/survey/load-survey-by-id";
-import {badRequest, forbidden, serverError} from "@/presentation/helpers/http/http-helper";
+import {badRequest, forbidden, ok, serverError} from "@/presentation/helpers/http/http-helper";
 import {AccessDeniedError, InvalidParamError} from "@/presentation/errors";
 import {SaveSurveyResult} from "@/domain/usecases/survey-result/save-survey-result";
 import {LoadAccountByToken} from "@/domain/usecases/account/load-account-by-token";
@@ -29,14 +29,14 @@ export class SaveSurveyResultController implements Controller{
                     date: new Date(),
                     accountId: httpRequest.accountId
                 })
-
                 if(!saveSurveyResult){
                     return badRequest(new Error("Something went wrong, try again later."))
                 }
+
+                return ok(saveSurveyResult);
             } else {
                 return forbidden(new InvalidParamError("surveyId"));
             }
-            return null
 
         } catch (e) {
             return serverError(e)
