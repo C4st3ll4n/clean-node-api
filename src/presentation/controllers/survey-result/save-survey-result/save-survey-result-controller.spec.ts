@@ -8,7 +8,6 @@ import {badRequest, forbidden, serverError} from "@/presentation/helpers/http/ht
 import {SaveSurveyResult, SaveSurveyResultModel} from "@/domain/usecases/survey-result/save-survey-result";
 import {SurveyResultModel} from "@/domain/models/survey-result";
 import {InvalidParamError} from "@/presentation/errors";
-import {LoadAccountByToken} from "@/domain/usecases/account/load-account-by-token";
 import {AccountModel} from "@/domain/models/account";
 import mockdate from "mockdate";
 
@@ -61,20 +60,10 @@ const makeAccount = (): AccountModel => ({
     name: "any_name",
     password: "any_password"
 });
-const makeLoadAccount = (): LoadAccountByToken => {
-    class LoadAccountByTokenStub implements LoadAccountByToken {
-        async loadByToken(token: string, role?: string): Promise<AccountModel> {
-            return Promise.resolve(makeAccount());
-        }
-    }
-
-    return new LoadAccountByTokenStub();
-};
 const makeSut = ():SUTTypes=>{
     const loadSurveyStub = makeLoadSurveyStub()
     const saveSurveyResult = makeSaveSurveyResult()
-    const loadAccountByToken = makeLoadAccount()
-    const sut = new SaveSurveyResultController(loadSurveyStub, saveSurveyResult, loadAccountByToken)
+    const sut = new SaveSurveyResultController(loadSurveyStub, saveSurveyResult)
     return {
         sut,
         loadSurveyStub,

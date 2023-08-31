@@ -8,8 +8,7 @@ import {LoadAccountByToken} from "@/domain/usecases/account/load-account-by-toke
 export class SaveSurveyResultController implements Controller{
 
     constructor(private readonly loadSurvey: LoadSurveyById,
-                private readonly saveResult: SaveSurveyResult,
-                private readonly loadAccountToken: LoadAccountByToken) {
+                private readonly saveResult: SaveSurveyResult) {
     }
 
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
