@@ -3,22 +3,13 @@ import { EmailInUseError, MissingParamError } from "../../../errors"
 import { AddAccount, AddAccountParam, AccountModel, HttpRequest, Validation, Authentication, AuthParam } from "./signup-controller-protocols"
 import { serverError, badRequest, ok, forbidden } from "../../../helpers/http/http-helper"
 import {throwError} from "@/domain/test";
+import {makeValidationStub} from "@/validation/test";
 
 type SutTypes ={
     sut: SignUpController,
     addAccountStub: AddAccount,
     validationStub: Validation,
     authentication: Authentication
-}
-
-const makeValidation = (): Validation => {
-    class ValidationStub implements Validation {
-        validate(input:any):Error{
-            return null
-        }
-    }
-
-    return new ValidationStub()
 }
 
 const makeHttpRequest = (): HttpRequest => ({
@@ -63,7 +54,7 @@ const makeAuth = (): Authentication => {
 const makeSut = (): SutTypes => {
 
     const addAccountStub = makeAddAccount()
-    const validationStub = makeValidation()
+    const validationStub = makeValidationStub()
     const authentication = makeAuth()
     const sut = new SignUpController(addAccountStub, validationStub, authentication)
 

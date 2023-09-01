@@ -4,6 +4,7 @@ import { Validation } from "../../../protocols"
 import { LoginController } from "./login-controller"
 import { HttpRequest, Authentication, AuthParam } from "./login-controller-protocols"
 import {throwError} from "@/domain/test";
+import {makeValidationStub} from "@/validation/test";
 
 type SutTypes ={
     sut: LoginController,
@@ -11,15 +12,6 @@ type SutTypes ={
     authentication: Authentication
 }
 
-const makeValidation = (): Validation => {
-    class ValidationStub implements Validation {
-        validate(input: any): Error {
-            return null
-        }
-    }
-
-    return new ValidationStub()
-}
 
 const makeAuth = (): Authentication => {
     class AuthStub implements Authentication {
@@ -33,7 +25,7 @@ const makeAuth = (): Authentication => {
 
 const makeSut = (): SutTypes => {
 
-    const validation = makeValidation()
+    const validation = makeValidationStub()
     const authentication = makeAuth()
     const sut = new LoginController(validation, authentication)
 

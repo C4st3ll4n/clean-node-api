@@ -2,10 +2,10 @@ import {
     HashComparer,
     LoadAccountByEmailRepository,
     UpdateAcessTokenRepository,
-    Encrypter, AccountModel
+    Encrypter
 } from "./db-authentication-protocols"
 import { DbAuthentication } from "./db-authentication"
-import {mockAccount, mockAuthParam, throwError} from "@/domain/test";
+import {mockAuthParam, throwError} from "@/domain/test";
 import {
     makeEncrypterStub,
     makeHashCompareStub, makeLoadAccountStub,
