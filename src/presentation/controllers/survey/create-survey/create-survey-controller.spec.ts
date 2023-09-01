@@ -1,13 +1,13 @@
 import {
     Controller,
     HttpRequest,
-    HttpResponse,
     Validation,
 } from "../../../protocols";
 import {CreateSurveyController} from "./create-survey-controller";
 import {badRequest, noContent, serverError} from "../../../helpers/http/http-helper";
-import {AddSurvey, AddSurveyModel} from "./create-survey-protocols";
+import {AddSurvey, AddSurveyParam} from "./create-survey-protocols";
 import * as mockdate from "mockdate";
+import {makeValidationStub} from "@/validation/test";
 
 type SUTTypes ={
     sut: Controller;
@@ -17,22 +17,12 @@ type SUTTypes ={
 
 const makeAddSurveyStub = (): AddSurvey => {
     class AddSurveyStub implements AddSurvey {
-        async add(input: AddSurveyModel): Promise<void> {
+        async add(input: AddSurveyParam): Promise<void> {
             return new Promise((resolve) => resolve());
         }
     }
 
     return new AddSurveyStub();
-};
-
-const makeValidationStub = (): Validation => {
-    class ValidationStub implements Validation {
-        validate(input: any): Error {
-            return null;
-        }
-    }
-
-    return new ValidationStub();
 };
 
 const makeFakeRequest = (): HttpRequest => ({

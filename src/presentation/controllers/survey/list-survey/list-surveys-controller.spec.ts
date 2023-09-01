@@ -3,25 +3,14 @@ import {SurveyModel} from "@/domain/models/survey";
 import {ListSurveysController} from "./list-surveys-controller";
 import * as mockdate from "mockdate";
 import {serverError} from "../../../helpers/http/http-helper";
+import {makeFakeSurvey} from "@/domain/test";
 
 type SUTTYpes ={
     sut: ListSurveysController,
     listSurveys: ListSurvey
 }
 
-const makeFakeSurvey = ():SurveyModel => {
-    return {
-        id: "any_id",
-        date: new Date(),
-        question:"any_question",
-        answers:[
-            {
-                image:"any_image",
-                answer:"any_answer"
-            }
-        ]
-    };
-};
+
 const makeListSurveyStub = (): ListSurvey =>
     new class implements ListSurvey {
         getAll(): Promise<SurveyModel[]> {

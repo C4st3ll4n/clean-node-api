@@ -1,6 +1,7 @@
 import { MongoHelper } from "../helpers/mongo-helper";
 import { AccountMongoRepository } from "./account-mongo-repository";
 import { Collection } from "mongodb";
+import {mockAccountParam} from "@/domain/test";
 const makeSut = (): AccountMongoRepository => {
   return new AccountMongoRepository();
 };
@@ -24,11 +25,7 @@ describe("Account Mongo Repository", () => {
   describe("add", () => {
     test("Should return an account on add success", async () => {
       const sut = makeSut();
-      const account = await sut.add({
-        name: "any_name",
-        email: "any_email",
-        password: "any_password",
-      });
+      const account = await sut.add(mockAccountParam());
       expect(account).toBeTruthy();
       expect(account.id).toBeTruthy();
       expect(account.name).toBe("any_name");

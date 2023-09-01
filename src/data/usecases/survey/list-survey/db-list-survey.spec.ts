@@ -2,6 +2,8 @@ import {ListSurveyRepository} from "@/data/protocols/db/survey/list-survey-repos
 import {SurveyModel} from "@/domain/models/survey";
 import {DBListSurvey} from "./db-list-survey";
 import * as mockdate from "mockdate";
+import {throwError} from "@/domain/test";
+import {makeListSurveyRepositoryStub} from "@/data/test";
 
 type SUTTypes = {
     sut: DBListSurvey
@@ -19,29 +21,9 @@ const makeFakeSurvey = (): SurveyModel => <SurveyModel>({
     id: "any_id",
     date: new Date()
 });
-const makeRepositoryStub = (): ListSurveyRepository => {
-    class ListSurveyRepositoryStub implements ListSurveyRepository {
-        async all(): Promise<SurveyModel[]> {
-            return Promise.resolve([
-                makeFakeSurvey()
-            ]);
-        }
 
-        load(accountId: string): Promise<SurveyModel[]> {
-            return Promise.resolve([
-                makeFakeSurvey()
-            ]);
-        }
-
-        loadById(surveyId: string): Promise<SurveyModel> {
-            return Promise.resolve(makeFakeSurvey());
-        }
-    }
-
-    return new ListSurveyRepositoryStub();
-};
 const makeSUT = (): SUTTypes => {
-    const repository = makeRepositoryStub()
+    const repository = makeListSurveyRepositoryStub()
     const sut = new DBListSurvey(repository)
     return {sut, repository}
 }
@@ -72,7 +54,7 @@ describe("DbListSurvey Usecase", () => {
 
         test("Should throw when ListSurveyRepository throws", () => {
             const {sut, repository} = makeSUT();
-            jest.spyOn(repository, "all").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+            jest.spyOn(repository, "all").mockImplementationOnce(throwError)
             const result = sut.getAll();
 
             expect(result).rejects.toThrow()
@@ -100,7 +82,7 @@ describe("DbListSurvey Usecase", () => {
 
         test("Should throw when LoadSurveyById throws", () => {
             const {sut, repository} = makeSUT();
-            jest.spyOn(repository, "loadById").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+            jest.spyOn(repository, "loadById").mockImplementationOnce(throwError)
             const result = sut.loadById("any_id");
 
             expect(result).rejects.toThrow()

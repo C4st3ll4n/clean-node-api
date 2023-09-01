@@ -2,7 +2,9 @@ import { InvalidParamError, MissingParamError } from "../../../errors"
 import { badRequest, serverError, unauthorized, ok } from "../../../helpers/http/http-helper"
 import { Validation } from "../../../protocols"
 import { LoginController } from "./login-controller"
-import { HttpRequest, Authentication, AuthModel } from "./login-controller-protocols"
+import { HttpRequest, Authentication, AuthParam } from "./login-controller-protocols"
+import {throwError} from "@/domain/test";
+import {makeValidationStub} from "@/validation/test";
 
 type SutTypes ={
     sut: LoginController,
@@ -10,19 +12,10 @@ type SutTypes ={
     authentication: Authentication
 }
 
-const makeValidation = (): Validation => {
-    class ValidationStub implements Validation {
-        validate(input: any): Error {
-            return null
-        }
-    }
-
-    return new ValidationStub()
-}
 
 const makeAuth = (): Authentication => {
     class AuthStub implements Authentication {
-        async auth(email: AuthModel): Promise<string> {
+        async auth(email: AuthParam): Promise<string> {
             return new Promise(resolve => resolve("any_token"))
         }
     }
@@ -32,7 +25,7 @@ const makeAuth = (): Authentication => {
 
 const makeSut = (): SutTypes => {
 
-    const validation = makeValidation()
+    const validation = makeValidationStub()
     const authentication = makeAuth()
     const sut = new LoginController(validation, authentication)
 
@@ -94,10 +87,7 @@ describe("Login Controller", () => {
     test("Should return 500 if EmailValidator throws", async () => {
         const { sut, validation } = makeSut()
 
-        jest.spyOn(validation, 'validate').mockImplementationOnce(() => {
-            throw new Error()
-        })
-
+        jest.spyOn(validation, 'validate').mockImplementationOnce(throwError)
         const httpRequest = makeHttpRequest()
 
         const httpResponse = await sut.handle(httpRequest)
@@ -142,9 +132,7 @@ describe("Login Controller", () => {
     test("Should return 500 if Authentication throws", async () => {
         const { sut, authentication } = makeSut()
 
-        jest.spyOn(authentication, 'auth').mockImplementationOnce(() => {
-            throw new Error()
-        })
+        jest.spyOn(authentication, 'auth').mockImplementationOnce(throwError)
 
         const httpRequest = makeHttpRequest()
 
