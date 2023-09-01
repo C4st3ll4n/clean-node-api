@@ -1,7 +1,6 @@
 import {
     Controller,
     HttpRequest,
-    HttpResponse,
     Validation,
 } from "../../../protocols";
 import {CreateSurveyController} from "./create-survey-controller";

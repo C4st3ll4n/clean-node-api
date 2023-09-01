@@ -1,13 +1,11 @@
 import {
-  AccountModel,
-  AddAccountParam,
   Hasher,
   AddAccountRepository,
-  LoadAccountByEmailRepository,
+  LoadAccountByEmailRepository, AccountModel,
 } from "./db-add-account-protocols";
 import { DbAddAccount } from "./db-add-account";
-import {mockAccount, mockAccountParam} from "@/domain/test";
-import {makeHasherStub} from "@/data/test";
+import {mockAccount, mockAccountParam, throwError} from "@/domain/test";
+import {makeAddAccountRepositoryStub, makeHasherStub} from "@/data/test";
 
 type SutTypes = {
   sut: DbAddAccount;
@@ -16,25 +14,15 @@ type SutTypes = {
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
 }
 
-const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
-    class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-        async loadByEmail(email: string): Promise<AccountModel> {
-            return new Promise(resolve => resolve(null))
-        }
-    }
-    return new LoadAccountByEmailRepositoryStub()
-}
-
-
-
-const makeAddAccountRepositoryStub = (): AddAccountRepository => {
-  class AddAccountRepositoryStub implements AddAccountRepository {
-    async add(accountData: AddAccountParam): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(mockAccount()));
+export const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
+  class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
+    async loadByEmail(email: string): Promise<AccountModel> {
+      return new Promise(resolve => resolve(null))
     }
   }
-  return new AddAccountRepositoryStub();
-};
+
+  return new LoadAccountByEmailRepositoryStub()
+}
 
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasherStub();
@@ -60,15 +48,13 @@ describe("DbAddAccount Usecase", () => {
       expect(hasherSpy).toBeCalledWith("any_password");
     });
 
-    test("Should throw if Hasher throws", async () => {
+    test("Should throw if Hasher throws", () => {
       const { sut, hasherStub } = makeSut();
       jest
         .spyOn(hasherStub, "hash")
-        .mockReturnValueOnce(
-          new Promise((resolve, reject) => reject(new Error()))
-        );
+        .mockImplementationOnce(throwError);
       const promise = sut.add(mockAccountParam());
-      await expect(promise).rejects.toThrow();
+      expect(promise).rejects.toThrow();
     });
   });
 
@@ -89,9 +75,7 @@ describe("DbAddAccount Usecase", () => {
       const { sut, addAccountRepositoryStub } = makeSut();
       jest
         .spyOn(addAccountRepositoryStub, "add")
-        .mockReturnValueOnce(
-          new Promise((resolve, reject) => reject(new Error()))
-        );
+        .mockImplementationOnce(throwError);
 
       const promise = sut.add(mockAccountParam());
       await expect(promise).rejects.toThrow();

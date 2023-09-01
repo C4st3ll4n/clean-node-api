@@ -3,6 +3,7 @@ import {SurveyModel} from "@/domain/models/survey";
 import {DBListSurvey} from "./db-list-survey";
 import * as mockdate from "mockdate";
 import {throwError} from "@/domain/test";
+import {makeListSurveyRepositoryStub} from "@/data/test";
 
 type SUTTypes = {
     sut: DBListSurvey
@@ -20,29 +21,9 @@ const makeFakeSurvey = (): SurveyModel => <SurveyModel>({
     id: "any_id",
     date: new Date()
 });
-const makeRepositoryStub = (): ListSurveyRepository => {
-    class ListSurveyRepositoryStub implements ListSurveyRepository {
-        async all(): Promise<SurveyModel[]> {
-            return Promise.resolve([
-                makeFakeSurvey()
-            ]);
-        }
 
-        load(accountId: string): Promise<SurveyModel[]> {
-            return Promise.resolve([
-                makeFakeSurvey()
-            ]);
-        }
-
-        loadById(surveyId: string): Promise<SurveyModel> {
-            return Promise.resolve(makeFakeSurvey());
-        }
-    }
-
-    return new ListSurveyRepositoryStub();
-};
 const makeSUT = (): SUTTypes => {
-    const repository = makeRepositoryStub()
+    const repository = makeListSurveyRepositoryStub()
     const sut = new DBListSurvey(repository)
     return {sut, repository}
 }

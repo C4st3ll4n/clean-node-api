@@ -1,9 +1,8 @@
 import {Controller, HttpRequest, HttpResponse} from "@/presentation/protocols";
 import {LoadSurveyById} from "@/domain/usecases/survey/load-survey-by-id";
 import {badRequest, forbidden, ok, serverError} from "@/presentation/helpers/http/http-helper";
-import {AccessDeniedError, InvalidParamError} from "@/presentation/errors";
+import {InvalidParamError} from "@/presentation/errors";
 import {SaveSurveyResult} from "@/domain/usecases/survey-result/save-survey-result";
-import {LoadAccountByToken} from "@/domain/usecases/account/load-account-by-token";
 
 export class SaveSurveyResultController implements Controller{
 
