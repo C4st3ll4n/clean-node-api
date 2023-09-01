@@ -18,7 +18,7 @@ type SUTTypes ={
 const makeAddSurveyStub = (): AddSurvey => {
     class AddSurveyStub implements AddSurvey {
         async add(input: AddSurveyParam): Promise<void> {
-            return new Promise((resolve) => resolve());
+            return Promise.resolve();
         }
     }
 

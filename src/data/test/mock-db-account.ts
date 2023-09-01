@@ -10,7 +10,7 @@ import {UpdateAcessTokenRepository} from "@/data/protocols/db/account/update-acc
 export const makeAddAccountRepositoryStub = (): AddAccountRepository => {
     class AddAccountRepositoryStub implements AddAccountRepository {
         async add(accountData: AddAccountParam): Promise<AccountModel> {
-            return new Promise((resolve) => resolve(mockAccount()));
+            return Promise.resolve(mockAccount());
         }
     }
 
@@ -33,7 +33,7 @@ export const makeLoadAccountByTokenStub = (): LoadAccountByTokenRepository => {
     class LoadAccountByTokenRepositoryStub
         implements LoadAccountByTokenRepository {
         async loadByToken(token: string, role?: string): Promise<AccountModel> {
-            return new Promise((resolve) => resolve(mockAccount()));
+            return Promise.resolve(mockAccount());
         }
     }
 

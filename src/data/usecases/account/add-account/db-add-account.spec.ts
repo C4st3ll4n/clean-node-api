@@ -98,7 +98,7 @@ describe("DbAddAccount Usecase", () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
 
     jest.spyOn(loadAccountByEmailRepositoryStub, "loadByEmail").mockReturnValueOnce(
-      new Promise(resolve=>resolve(mockAccount()))
+        Promise.resolve(mockAccount())
     )
 
     const account = await sut.add(mockAccountParam());

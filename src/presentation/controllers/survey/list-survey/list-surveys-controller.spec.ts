@@ -59,7 +59,7 @@ describe("ListSurveys Controller", () => {
     test("Should return a 404 with survey list empty", async()=>{
 
         const {sut, listSurveys} = makeSUT()
-        jest.spyOn(listSurveys, "getAll").mockReturnValueOnce(new Promise((resolve) => resolve([])));
+        jest.spyOn(listSurveys, "getAll").mockReturnValueOnce(Promise.resolve([]));
         const listReponse = await sut.handle({})
 
         expect(listReponse.statusCode).toEqual(404)

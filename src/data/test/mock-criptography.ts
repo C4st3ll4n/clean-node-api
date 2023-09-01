@@ -6,7 +6,7 @@ import {Decrypter} from "@/data/protocols/criptography/decrypter";
 export const makeHasherStub = (): Hasher => {
     class HasherStub implements Hasher {
         async hash(value: string): Promise<string> {
-            return new Promise((resolve) => resolve("hashed_password"));
+            return Promise.resolve("hashed_password")
         }
     }
     return new HasherStub();
@@ -15,7 +15,7 @@ export const makeHasherStub = (): Hasher => {
 export const makeHashCompareStub = (): HashComparer => {
     class HashCompareStub implements HashComparer {
         async compare(value: string, hash: string): Promise<boolean> {
-            return new Promise(resolve => resolve(true))
+            return Promise.resolve(true);
         }
     }
     return new HashCompareStub()
@@ -24,7 +24,7 @@ export const makeHashCompareStub = (): HashComparer => {
 export const makeEncrypterStub = (): Encrypter => {
     class EncrypterStub implements Encrypter {
         async encrypt(identifier: string): Promise<string> {
-            return new Promise(resolve => resolve("valid_token"))
+            return Promise.resolve("valid_token")
         }
     }
 
@@ -35,7 +35,7 @@ export const makeEncrypterStub = (): Encrypter => {
 export const makeDecrypterStub = (): Decrypter => {
     class DecrypterStub implements Decrypter {
         decrypt(value: string): Promise<object> {
-            return new Promise((resolve) => resolve({id:"any_token"}));
+            return Promise.resolve({id:"any_token"});
         }
     }
 

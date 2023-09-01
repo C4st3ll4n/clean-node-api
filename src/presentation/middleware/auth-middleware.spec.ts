@@ -20,7 +20,7 @@ const makeFakeRequest = (): HttpRequest => ({
 const makeLoadAccountTokenStub = (): LoadAccountByToken => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
     loadByToken(token: string, role?: string | undefined): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(mockAccount()));
+      return Promise.resolve(mockAccount());
     }
   }
 

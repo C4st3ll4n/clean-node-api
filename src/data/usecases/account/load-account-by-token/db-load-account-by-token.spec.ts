@@ -37,7 +37,7 @@ describe("DB Load Account By Token", () => {
         const {sut, decrypterStub} = makeSUT();
         jest
             .spyOn(decrypterStub, "decrypt")
-            .mockReturnValueOnce(new Promise((resolve) => resolve(null)));
+            .mockReturnValueOnce(Promise.resolve(null));
         const promise = await sut.loadByToken("any_token");
         expect(promise).toBeNull();
     });
@@ -63,7 +63,7 @@ describe("DB Load Account By Token", () => {
         const {sut, repositoryStub} = makeSUT();
         jest
             .spyOn(repositoryStub, "loadByToken")
-            .mockReturnValueOnce(new Promise((resolve) => resolve(null)));
+            .mockReturnValueOnce(Promise.resolve(null));
         const promise = await sut.loadByToken("any_token");
         expect(promise).toBeNull();
     });
