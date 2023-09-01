@@ -2,6 +2,7 @@ import {ListSurveyRepository} from "@/data/protocols/db/survey/list-survey-repos
 import {SurveyModel} from "@/domain/models/survey";
 import {DBListSurvey} from "./db-list-survey";
 import * as mockdate from "mockdate";
+import {throwError} from "@/domain/test";
 
 type SUTTypes = {
     sut: DBListSurvey
@@ -72,7 +73,7 @@ describe("DbListSurvey Usecase", () => {
 
         test("Should throw when ListSurveyRepository throws", () => {
             const {sut, repository} = makeSUT();
-            jest.spyOn(repository, "all").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+            jest.spyOn(repository, "all").mockImplementationOnce(throwError)
             const result = sut.getAll();
 
             expect(result).rejects.toThrow()
@@ -100,7 +101,7 @@ describe("DbListSurvey Usecase", () => {
 
         test("Should throw when LoadSurveyById throws", () => {
             const {sut, repository} = makeSUT();
-            jest.spyOn(repository, "loadById").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+            jest.spyOn(repository, "loadById").mockImplementationOnce(throwError)
             const result = sut.loadById("any_id");
 
             expect(result).rejects.toThrow()

@@ -4,6 +4,7 @@ import { AccessDeniedError } from "../errors";
 import { AuthMiddleware } from "./auth-middleware";
 import { LoadAccountByToken } from "@/domain/usecases/account/load-account-by-token";
 import { AccountModel } from "@/domain/models/account";
+import {mockAccount} from "@/domain/test";
 
 type SUTTypes ={
   sut: AuthMiddleware;
@@ -16,17 +17,10 @@ const makeFakeRequest = (): HttpRequest => ({
   }
 });
 
-const makeFakeAccount = (): AccountModel => ({
-  id: "valid_id",
-  name: "valid_name",
-  email: "valid_email",
-  password: "hashed_password",
-});
-
 const makeLoadAccountTokenStub = (): LoadAccountByToken => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
     loadByToken(token: string, role?: string | undefined): Promise<AccountModel> {
-      return new Promise((resolve) => resolve(makeFakeAccount()));
+      return new Promise((resolve) => resolve(mockAccount()));
     }
   }
 
@@ -68,7 +62,7 @@ describe("Auth Middleware", () => {
   test("Should return 200 when LoadAccountByToken returns an account", async () => {
     const { sut } = makeSUT();
     const httpResponse = await sut.handle(makeFakeRequest());
-    expect(httpResponse).toEqual(ok({ accountId: "valid_id"}));
+    expect(httpResponse).toEqual(ok({ accountId: "any_id"}));
   });
 
   test("Should return 500 when LoadAccountByToken throws", async () => {

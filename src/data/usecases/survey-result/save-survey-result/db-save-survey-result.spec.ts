@@ -3,6 +3,7 @@ import {SaveSurveyResultRepository} from "@/data/protocols/db/survey-result/save
 import {SaveSurveyResultParam} from "@/domain/usecases/survey-result/save-survey-result";
 import {SurveyResultModel} from "@/domain/models/survey-result";
 import mockdate from "mockdate";
+import {throwError} from "@/domain/test";
 
 type SUTTypes = {
     sut: DbSaveSurveyResult
@@ -58,7 +59,7 @@ describe("DB Save Survey Result", () => {
     })
     test("Should throw when repository throws", async () => {
         const {sut, repository} = makeSUT();
-        jest.spyOn(repository, "save").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())));
+        jest.spyOn(repository, "save").mockImplementationOnce(throwError)
         const result = sut.save({
             accountId: "any_account",
             date: new Date(),
