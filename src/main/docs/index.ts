@@ -8,6 +8,13 @@ import { unauthorizedResponse } from "./responses/unathourized-response";
 import { accountSchema } from "./schemas/account-schema";
 import { errorAPISchema } from "./schemas/error-api-schema";
 import { loginSchema } from "./schemas/login-schema";
+import {answerSchema} from "@/main/docs/schemas/answer-schema";
+import {surveySchema} from "@/main/docs/schemas/survey-schema";
+import {surveysSchema} from "@/main/docs/schemas/surveys-schema";
+import {suveysPath} from "@/main/docs/paths/surveys-path";
+import {apiKeySchema} from "@/main/docs/schemas/api-key-schema";
+import {signupPath} from "@/main/docs/paths/signup-path";
+import {signupSchema} from "@/main/docs/schemas/signup-schema";
 
 export default {
   openapi: "3.0.0",
@@ -26,15 +33,23 @@ export default {
     },
   ],
   tags: [{
-    name:"login"
+    name:"login",
+  }, {
+    name: "surveys"
   }],
   paths: {
-    "/login":loginPath
+    "/login":loginPath,
+    "/surveys": suveysPath,
+    "/signup": signupPath
   },
   schemas:{
     account: accountSchema,
     login: loginSchema,
-    errorAPI: errorAPISchema
+    errorAPI: errorAPISchema,
+    answer: answerSchema,
+    survey: surveySchema,
+    surveys: surveysSchema,
+    signup: signupSchema
   },
   responses:{
     noContent: noContentResponse,
@@ -43,5 +58,10 @@ export default {
     forbidden: forbiddenResponse,
     notFound: notFoundResponse,
     serverError: serverErrorResponse
+  },
+  components: {
+    securitySchema: {
+      apiKeySchema
+    }
   }
 };

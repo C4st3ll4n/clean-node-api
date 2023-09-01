@@ -1,13 +1,13 @@
-export const loginPath = {
+export const signupPath = {
   post: {
     tags: ["login"],
-    summary: "Login",
-    description: "Endpoint para autenticar o usuário",
+    summary: "Cadastrar",
+    description: "Endpoint para criar o usuário",
     requestBody: {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/schemas/login",
+            $ref: "#/schemas/signup",
           },
         },
       },
