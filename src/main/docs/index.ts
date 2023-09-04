@@ -15,6 +15,7 @@ import {suveysPath} from "@/main/docs/paths/surveys-path";
 import {apiKeySchema} from "@/main/docs/schemas/api-key-schema";
 import {signupPath} from "@/main/docs/paths/signup-path";
 import {signupSchema} from "@/main/docs/schemas/signup-schema";
+import {addSurveySchema} from "@/main/docs/schemas/add-survey-schema";
 
 export default {
   openapi: "3.0.0",
@@ -49,7 +50,8 @@ export default {
     answer: answerSchema,
     survey: surveySchema,
     surveys: surveysSchema,
-    signup: signupSchema
+    signup: signupSchema,
+    addSurvey: addSurveySchema
   },
   responses:{
     noContent: noContentResponse,

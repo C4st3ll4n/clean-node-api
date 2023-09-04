@@ -31,4 +31,38 @@ export const suveysPath = {
       },
     },
   },
+  post: {
+    tags: ["surveys"],
+    security: [
+      {apiKeyAuth: []}
+    ],
+    summary: "Create Surveys",
+    description: "Endpoint para criar enquetes (acessível apenas para administradores)",
+    requestBody: {
+      content:{
+        "application/json":{
+           schema: {
+             $ref: '#/schemas/add-survey'
+           }
+        }
+      }
+    },
+    responses: {
+      204: {
+        description: "Success"
+      },
+      400: {
+        $ref: "#/responses/badRequest"
+      },
+      403: {
+        $ref: "#/responses/forbidden"
+      },
+      404: {
+        $ref: "#/responses/notFound"
+      },
+      500: {
+        $ref: "#/responses/serverError"
+      },
+    },
+  }
 };
