@@ -16,9 +16,17 @@ import {apiKeySchema} from "@/main/docs/schemas/api-key-schema";
 import {signupPath} from "@/main/docs/paths/signup-path";
 import {signupSchema} from "@/main/docs/schemas/signup-schema";
 import {addSurveySchema} from "@/main/docs/schemas/add-survey-schema";
+import {addSurveyResultSchema} from "@/main/docs/schemas/add-survey-result-schema";
+import {surveyResultSchema} from "@/main/docs/schemas/survey-result-schema";
+import {surveyResultPath} from "@/main/docs/paths/survey-result-path";
 
 export default {
   openapi: "3.0.0",
+  security: [
+    {
+      apiKeyAuth: []
+    }
+  ],
   info: {
     title: "Survey API",
     description: "Clean Node Survey API: Create and manage surveys for developers",
@@ -41,7 +49,8 @@ export default {
   paths: {
     "/login":loginPath,
     "/surveys": suveysPath,
-    "/signup": signupPath
+    "/signup": signupPath,
+    "/surveys/{id}/results": surveyResultPath
   },
   schemas:{
     account: accountSchema,
@@ -51,7 +60,9 @@ export default {
     survey: surveySchema,
     surveys: surveysSchema,
     signup: signupSchema,
-    addSurvey: addSurveySchema
+    addSurvey: addSurveySchema,
+    addSurveyResult: addSurveyResultSchema,
+    surveyResult: surveyResultSchema
   },
   responses:{
     noContent: noContentResponse,
