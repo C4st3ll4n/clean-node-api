@@ -10,6 +10,7 @@ import {SurveyResultModel} from "@/domain/models/survey-result";
 import {InvalidParamError} from "@/presentation/errors";
 import {AccountModel} from "@/domain/models/account";
 import mockdate from "mockdate";
+import {makeFakeSurveyResult} from "@/domain/test/mock-survey-result";
 
 type SUTTypes = {
     sut: SaveSurveyResultController,
@@ -37,17 +38,10 @@ const makeLoadSurveyStub = ():LoadSurveyById => {
 
   return new LoadSurveyByIdStub();
 };
-const makeSurveyResult = (): SurveyResultModel => ({
-    id: "any_id",
-    answer: "any_answer",
-    surveyId: "any_survey_id",
-    date: new Date(),
-    accountId: "any_account_id"
-});
 const makeSaveSurveyResult = (): SaveSurveyResult => {
     class SaveSurveyResultStub implements SaveSurveyResult {
         async save(data: SaveSurveyResultParam): Promise<SurveyResultModel> {
-            return Promise.resolve(makeSurveyResult());
+            return Promise.resolve(makeFakeSurveyResult());
         }
     }
 
@@ -145,7 +139,7 @@ describe("Save SurveyResult Controller", ()=>{
             const {sut} = makeSut();
 
             const httpResponse = await sut.handle(makeRequest());
-            expect(httpResponse).toEqual(ok(makeSurveyResult()));
+            expect(httpResponse).toEqual(ok(makeFakeSurveyResult()));
         })
 
     })
