@@ -52,11 +52,11 @@ const makeSurveyResult = async (accountId: string, surveyId: string): Promise<Su
     });
     const surveyResult = res.ops[0];
     return {
-        id: surveyResult._id,
-        answer: surveyResult.answer,
+        answers: surveyResult.answers,
         accountId: surveyResult.accountId,
         date: surveyResult.date,
-        surveyId: surveyResult.surveyId
+        surveyId: surveyResult.surveyId,
+        question: surveyResult.question
     }
 }
 
@@ -97,8 +97,11 @@ describe("Survey Result Mongo Repository", () => {
             });
 
             expect(surveyResult).toBeTruthy();
-            expect(surveyResult.id).toBeTruthy();
-            expect(surveyResult.answer).toEqual(survey.answers[0].answer);
+            expect(surveyResult.answers).toBeTruthy();
+            expect(surveyResult.surveyId).toEqual(survey.id);
+            expect(surveyResult.answers[0].answer).toEqual(survey.answers[0].answer);
+            expect(surveyResult.answers[0].count).toEqual(1);
+            expect(surveyResult.answers[0].percent).toEqual(50);
         });
 
         test("Should update a survey result", async () => {
@@ -116,8 +119,12 @@ describe("Survey Result Mongo Repository", () => {
             });
 
             expect(updatedSurveyResult).toBeTruthy();
-            expect(updatedSurveyResult.id).toEqual(createdSurveyResult.id);
-            expect(updatedSurveyResult.answer).toEqual("any_other_answer");
+            expect(updatedSurveyResult.surveyId).toEqual(createdSurveyResult.surveyId);
+            expect(updatedSurveyResult.answers).toEqual(createdSurveyResult.answers);
+            expect(updatedSurveyResult.answers[0].count).toEqual(0);
+            expect(updatedSurveyResult.answers[0].percent).toEqual(0);
+            expect(updatedSurveyResult.answers[1].count).toEqual(2);
+            expect(updatedSurveyResult.answers[1].percent).toEqual(100);
         });
     })
 });

@@ -20,8 +20,12 @@ const makeFakeSurvey = (): SurveyResultModel => <SurveyResultModel>({
     accountId: "any_account",
     id: "any_id",
     date: new Date(),
-    answer: "any_answer",
-    surveyId: "any_survey_id"
+    answers: [
+        {answer:"any_answer", percent: 50, count: 1},
+        {answer:"other_answer", percent: 50, count: 1, image:"any_image"}
+    ],
+    surveyId: "any_survey_id",
+    question: 'any_question'
 });
 describe("DB Save Survey Result", () => {
 
