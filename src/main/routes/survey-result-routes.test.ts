@@ -96,7 +96,7 @@ describe("Survey Result Routes", () => {
     describe("GET /surveys/:surveyId/results", () => {
         test("Should return 403 on load survey result without accessToken", async () => {
             await request(app)
-                .get("/api/surveys/any_id/results")
+                .get("/api/surveys/any_survey_id/results")
                 .send({
                     answer: "any_answer"
                 })
@@ -107,7 +107,7 @@ describe("Survey Result Routes", () => {
             const accessToken = await makeAccessToken();
 
             await request(app)
-                .get("/api/surveys/any_id/results")
+                .get("/api/surveys/A6BF50DFA6277B2E471F6193/results")
                 .set("x-access-token", accessToken)
                 .expect(404);
         });
@@ -116,7 +116,7 @@ describe("Survey Result Routes", () => {
             const accessToken = await makeAccessToken();
             const survey = await makeSurvey();
             await request(app)
-                .put(`/api/surveys/${survey.id}/results`)
+                .get(`/api/surveys/${survey.id}/results`)
                 .set("x-access-token", accessToken)
                 .expect(200);
         });
