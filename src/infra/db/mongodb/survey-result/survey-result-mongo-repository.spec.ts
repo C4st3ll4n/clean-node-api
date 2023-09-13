@@ -133,4 +133,29 @@ describe("Survey Result Mongo Repository", () => {
             expect(updatedSurveyResult.answers[1].percent).toEqual(0);
         });
     })
+
+    describe("Load Survey result", ()=>{
+        test("Should load a survey result", async () => {
+            const survey = await makeSurvey();
+            const account = await makeAccount();
+            const sut = makeSut();
+
+            await sut.save({
+                accountId: account.id,
+                answer: survey.answers[0].answer,
+                date: new Date(),
+                surveyId: survey.id
+            });
+
+            const surveyResult = await sut.loadBySurveyId(survey.id);
+
+            expect(surveyResult).toBeTruthy();
+            expect(surveyResult.answers).toBeTruthy();
+            expect(surveyResult.surveyId).toEqual(survey.id);
+            expect(surveyResult.answers[0].answer).toEqual(survey.answers[0].answer);
+            expect(surveyResult.answers[0].count).toEqual(1);
+            expect(surveyResult.answers[0].percent).toEqual(100);
+        });
+
+    })
 });
