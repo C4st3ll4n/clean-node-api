@@ -1,7 +1,6 @@
 import {SurveyResultModel} from "@/domain/models/survey-result";
 
 export const makeFakeSurveyResult = (): SurveyResultModel => ({
-    accountId: "any_account_id",
     surveyId: "any_survey_id",
     date: new Date(),
     answers: [{
