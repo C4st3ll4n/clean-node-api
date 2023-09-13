@@ -4,7 +4,7 @@ import {makeLogControllerDecorator} from "../factory/decorator/log-controller-de
 import {auth} from "../middlewares/auth";
 import {
     makeSaveSurveyResultController
-} from "@/main/factory/controller/survey-result/save-survey-result-controller-factory";
+} from "@/main/factory/controller/survey-result/save-survey-result/save-survey-result-controller-factory";
 
 export default (router: Router): void => {
 
