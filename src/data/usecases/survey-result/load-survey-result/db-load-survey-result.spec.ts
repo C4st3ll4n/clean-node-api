@@ -67,4 +67,19 @@ describe("DB Load Survey Result UseCase", ()=>{
         expect(loadSpy).toHaveBeenCalledWith("any_survey_id");
 
     })
+
+    test("Should return a survey result with empties answer's count/percent when load survey result returns null", async ()=>{
+        const {sut, loadSurveyResultRepository, loadSurveyRepository} = makeSUT();
+        jest.spyOn(loadSurveyResultRepository, "loadBySurveyId").mockReturnValueOnce(null);
+
+        const surveyResult =  await sut.load("any_survey_id");
+
+        expect(surveyResult).toBeTruthy();
+        expect(surveyResult.surveyId).toEqual("any_survey_id");
+        expect(surveyResult.question).toEqual("any_question");
+        expect(surveyResult.answers).toBeTruthy();
+        expect(surveyResult.answers[0].answer).toEqual("any_answer");
+        expect(surveyResult.answers[0].count).toEqual(0);
+        expect(surveyResult.answers[0].percent).toEqual(0);
+    })
 })
