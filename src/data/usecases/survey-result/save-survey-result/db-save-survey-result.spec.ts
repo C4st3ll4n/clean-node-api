@@ -97,7 +97,7 @@ describe("DB Save Survey Result", () => {
         const {sut} = makeSUT();
 
         const result = await sut.save({
-            accountId: "any_account",
+            accountId: "any_account_id",
             date: new Date(),
             answer: "any_answer",
             surveyId: "any_survey_id"
@@ -106,7 +106,7 @@ describe("DB Save Survey Result", () => {
         expect(result).toBeTruthy()
         expect(result.surveyId).toEqual("any_survey_id")
         expect(result.answers).toBeTruthy()
-        expect(result.accountId).toEqual("any_account")
+        expect(result.accountId).toEqual("any_account_id")
         expect(result.answers[0].answer).toBe("any_answer")
     })
 })
