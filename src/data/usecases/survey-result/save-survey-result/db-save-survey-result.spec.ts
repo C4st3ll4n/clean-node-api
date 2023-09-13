@@ -106,7 +106,6 @@ describe("DB Save Survey Result", () => {
         expect(result).toBeTruthy()
         expect(result.surveyId).toEqual("any_survey_id")
         expect(result.answers).toBeTruthy()
-        expect(result.accountId).toEqual("any_account_id")
         expect(result.answers[0].answer).toBe("any_answer")
     })
 })

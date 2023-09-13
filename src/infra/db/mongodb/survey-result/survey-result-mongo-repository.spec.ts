@@ -53,7 +53,6 @@ const makeSurveyResult = async (accountId: string, surveyId: string): Promise<Su
     const surveyResult = res.ops[0];
     return {
         answers: surveyResult.answers,
-        accountId: surveyResult.accountId,
         date: surveyResult.date,
         surveyId: surveyResult.surveyId,
         question: surveyResult.question

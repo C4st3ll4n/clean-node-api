@@ -49,7 +49,7 @@ describe("DbListSurvey Usecase", () => {
             const listReponse = await sut.getAll();
             expect(listReponse).toBeTruthy()
             expect(listReponse[0]).toBeTruthy()
-            expect(listReponse[0].id).toEqual("any_id")
+            expect(listReponse[0].id).toEqual("any_survey_id")
         })
 
         test("Should throw when ListSurveyRepository throws", () => {
@@ -66,24 +66,24 @@ describe("DbListSurvey Usecase", () => {
         test("Should call LoadSurveyById correctly", async () => {
             const {sut, repository} = makeSUT()
             const spyRepository = jest.spyOn(repository, "loadById")
-            await sut.loadById("any_id");
+            await sut.loadById("any_survey_id");
 
             expect(spyRepository).toHaveBeenCalled()
         })
 
         test("Should return a valid survey", async () => {
             const {sut} = makeSUT()
-            const response = await sut.loadById("any_id");
+            const response = await sut.loadById("any_survey_id");
             expect(response).toBeTruthy()
             expect(response.id).toBeTruthy()
-            expect(response.id).toEqual("any_id")
+            expect(response.id).toEqual("any_survey_id")
         })
 
 
         test("Should throw when LoadSurveyById throws", () => {
             const {sut, repository} = makeSUT();
             jest.spyOn(repository, "loadById").mockImplementationOnce(throwError)
-            const result = sut.loadById("any_id");
+            const result = sut.loadById("any_survey_id");
 
             expect(result).rejects.toThrow()
         })
