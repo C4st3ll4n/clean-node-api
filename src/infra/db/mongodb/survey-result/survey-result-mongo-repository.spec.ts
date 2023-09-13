@@ -129,6 +129,8 @@ describe("Survey Result Mongo Repository", () => {
             expect(updatedSurveyResult.surveyId).toEqual(createdSurveyResult.surveyId);
             expect(updatedSurveyResult.answers[0].count).toEqual(1);
             expect(updatedSurveyResult.answers[0].percent).toEqual(100);
+            expect(updatedSurveyResult.answers[1].count).toEqual(0);
+            expect(updatedSurveyResult.answers[1].percent).toEqual(0);
         });
     })
 });
