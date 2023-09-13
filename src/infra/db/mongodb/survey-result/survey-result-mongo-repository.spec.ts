@@ -89,19 +89,20 @@ describe("Survey Result Mongo Repository", () => {
             const account = await makeAccount();
             const sut = makeSut();
 
-            const surveyResult = await sut.save({
+            await sut.save({
                 accountId: account.id,
                 answer: survey.answers[0].answer,
                 date: new Date(),
                 surveyId: survey.id
             });
 
-            expect(surveyResult).toBeTruthy();
-            expect(surveyResult.answers).toBeTruthy();
+            const surveyResult = await surveyResultCollection.findOne({
+                surveyId: survey.id,
+                accountId: account.id,
+            })
+
+                expect(surveyResult).toBeTruthy();
             expect(surveyResult.surveyId).toEqual(survey.id);
-            expect(surveyResult.answers[0].answer).toEqual(survey.answers[0].answer);
-            expect(surveyResult.answers[0].count).toEqual(1);
-            expect(surveyResult.answers[0].percent).toEqual(100);
         });
 
         test("Should update a survey result", async () => {
@@ -118,19 +119,22 @@ describe("Survey Result Mongo Repository", () => {
                 surveyId: survey.id
             });
 
-            const updatedSurveyResult = await sut.save({
+            await sut.save({
                 accountId: account.id,
                 answer: survey.answers[1].answer,
                 date: new Date(),
                 surveyId: survey.id
             });
 
+            const updatedSurveyResult = await surveyResultCollection.findOne({
+                surveyId: survey.id,
+                accountId: account.id,
+            });
+
+
             expect(updatedSurveyResult).toBeTruthy();
             expect(updatedSurveyResult.surveyId).toEqual(createdSurveyResult.surveyId);
-            expect(updatedSurveyResult.answers[0].count).toEqual(1);
-            expect(updatedSurveyResult.answers[0].percent).toEqual(100);
-            expect(updatedSurveyResult.answers[1].count).toEqual(0);
-            expect(updatedSurveyResult.answers[1].percent).toEqual(0);
+
         });
     })
 
