@@ -93,5 +93,34 @@ describe("Survey Result Routes", () => {
         });
 
     });
+    describe("GET /surveys/:surveyId/results", () => {
+        test("Should return 403 on load survey result without accessToken", async () => {
+            await request(app)
+                .get("/api/surveys/any_survey_id/results")
+                .send({
+                    answer: "any_answer"
+                })
+                .expect(403);
+        });
+
+        test("Should return 404 on load survey null return", async () => {
+            const accessToken = await makeAccessToken();
+
+            await request(app)
+                .get("/api/surveys/A6BF50DFA6277B2E471F6193/results")
+                .set("x-access-token", accessToken)
+                .expect(404);
+        });
+
+        test("Should return 200 on load survey result success", async () => {
+            const accessToken = await makeAccessToken();
+            const survey = await makeSurvey();
+            await request(app)
+                .get(`/api/surveys/${survey.id}/results`)
+                .set("x-access-token", accessToken)
+                .expect(200);
+        });
+
+    });
 
 });

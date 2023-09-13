@@ -45,7 +45,7 @@ describe("ListSurveys Controller", () => {
         expect(listReponse.statusCode).toEqual(200)
         expect(listReponse.body).toBeTruthy()
         expect(listReponse.body[0]).toBeTruthy()
-        expect(listReponse.body[0].id).toEqual("any_id")
+        expect(listReponse.body[0].id).toEqual("any_survey_id")
 
     })
 

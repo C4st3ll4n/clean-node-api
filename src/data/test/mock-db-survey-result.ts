@@ -6,8 +6,8 @@ import {makeFakeSurveyResult} from "@/domain/test/mock-survey-result";
 
 export const makeSaveSurveyResultRepositoryStub = (): SaveSurveyResultRepository => {
     class SaveSurveyResultRepositoryStub implements SaveSurveyResultRepository {
-        save(data: SaveSurveyResultParam): Promise<SurveyResultModel> {
-            return Promise.resolve(makeFakeSurveyResult());
+        save(data: SaveSurveyResultParam): Promise<void> {
+            return Promise.resolve(undefined);
         }
     }
 

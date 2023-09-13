@@ -52,11 +52,10 @@ const makeSurveyResult = async (accountId: string, surveyId: string): Promise<Su
     });
     const surveyResult = res.ops[0];
     return {
-        id: surveyResult._id,
-        answer: surveyResult.answer,
-        accountId: surveyResult.accountId,
+        answers: surveyResult.answers,
         date: surveyResult.date,
-        surveyId: surveyResult.surveyId
+        surveyId: surveyResult.surveyId,
+        question: surveyResult.question
     }
 }
 
@@ -89,16 +88,20 @@ describe("Survey Result Mongo Repository", () => {
             const account = await makeAccount();
             const sut = makeSut();
 
-            const surveyResult = await sut.save({
+            await sut.save({
                 accountId: account.id,
                 answer: survey.answers[0].answer,
                 date: new Date(),
                 surveyId: survey.id
             });
 
-            expect(surveyResult).toBeTruthy();
-            expect(surveyResult.id).toBeTruthy();
-            expect(surveyResult.answer).toEqual(survey.answers[0].answer);
+            const surveyResult = await surveyResultCollection.findOne({
+                surveyId: survey.id,
+                accountId: account.id,
+            })
+
+                expect(surveyResult).toBeTruthy();
+            expect(surveyResult.surveyId).toEqual(survey.id);
         });
 
         test("Should update a survey result", async () => {
@@ -108,16 +111,54 @@ describe("Survey Result Mongo Repository", () => {
 
             const sut = makeSut();
 
-            const updatedSurveyResult = await sut.save({
+            await sut.save({
+                accountId: account.id,
+                answer: survey.answers[0].answer,
+                date: new Date(),
+                surveyId: survey.id
+            });
+
+            await sut.save({
                 accountId: account.id,
                 answer: survey.answers[1].answer,
                 date: new Date(),
                 surveyId: survey.id
             });
 
+            const updatedSurveyResult = await surveyResultCollection.findOne({
+                surveyId: survey.id,
+                accountId: account.id,
+            });
+
+
             expect(updatedSurveyResult).toBeTruthy();
-            expect(updatedSurveyResult.id).toEqual(createdSurveyResult.id);
-            expect(updatedSurveyResult.answer).toEqual("any_other_answer");
+            expect(updatedSurveyResult.surveyId).toEqual(createdSurveyResult.surveyId);
+
         });
+    })
+
+    describe("Load Survey result", ()=>{
+        test("Should load a survey result", async () => {
+            const survey = await makeSurvey();
+            const account = await makeAccount();
+            const sut = makeSut();
+
+            await sut.save({
+                accountId: account.id,
+                answer: survey.answers[0].answer,
+                date: new Date(),
+                surveyId: survey.id
+            });
+
+            const surveyResult = await sut.loadBySurveyId(survey.id);
+
+            expect(surveyResult).toBeTruthy();
+            expect(surveyResult.answers).toBeTruthy();
+            expect(surveyResult.surveyId).toEqual(survey.id);
+            expect(surveyResult.answers[0].answer).toEqual(survey.answers[0].answer);
+            expect(surveyResult.answers[0].count).toEqual(1);
+            expect(surveyResult.answers[0].percent).toEqual(100);
+        });
+
     })
 });
