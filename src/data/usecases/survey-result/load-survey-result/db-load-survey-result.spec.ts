@@ -3,10 +3,14 @@ import {LoadSurveyResultRepository} from "@/data/protocols/db/survey-result/load
 import {SurveyResultModel} from "@/domain/models/survey-result";
 import {throwError} from "@/domain/test";
 import {makeFakeSurveyResult} from "@/domain/test/mock-survey-result";
+import {ListSurvey} from "@/domain/usecases/survey/list-survey";
+import {ListSurveyRepository} from "@/data/protocols/db/survey/list-survey-repository";
+import {makeListSurveyRepositoryStub} from "@/data/test";
 
 type SUTTypes = {
     sut: DbLoadSurveyResult
     loadSurveyResultRepository: LoadSurveyResultRepository
+    loadSurveyRepository: ListSurveyRepository
 }
 const mockLoadSurveyResultRepository = ():LoadSurveyResultRepository => {
     class LoadSurveyResultRepositoryStub implements LoadSurveyResultRepository {
@@ -19,10 +23,11 @@ const mockLoadSurveyResultRepository = ():LoadSurveyResultRepository => {
     return new LoadSurveyResultRepositoryStub();
 };
 const makeSUT = ():SUTTypes => {
+    const loadSurveyRepository: ListSurveyRepository = makeListSurveyRepositoryStub()
     const loadSurveyResultRepository = mockLoadSurveyResultRepository();
-    const sut = new DbLoadSurveyResult(loadSurveyResultRepository);
+    const sut = new DbLoadSurveyResult(loadSurveyResultRepository, loadSurveyRepository);
 
-    return {sut, loadSurveyResultRepository};
+    return {sut, loadSurveyResultRepository, loadSurveyRepository};
 };
 describe("DB Load Survey Result UseCase", ()=>{
 
@@ -51,5 +56,15 @@ describe("DB Load Survey Result UseCase", ()=>{
         expect(surveyResult.question).toEqual("any_question");
         expect(surveyResult.answers).toBeTruthy();
         expect(surveyResult.answers[0].answer).toEqual("any_answer");
+    })
+
+    test("Should call load survey by id repository when load survey result returns null", async ()=>{
+        const {sut, loadSurveyResultRepository, loadSurveyRepository} = makeSUT();
+        jest.spyOn(loadSurveyResultRepository, "loadBySurveyId").mockReturnValueOnce(null);
+        const loadSpy = jest.spyOn(loadSurveyRepository, "loadById");
+        const surveyResult =  await sut.load("any_survey_id");
+
+        expect(loadSpy).toHaveBeenCalledWith("any_survey_id");
+
     })
 })
