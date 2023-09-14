@@ -28,12 +28,12 @@ const makeSUT = (): SUTTypes => {
     return {sut, saveSurveyResultRepository, loadSurveyResultRepository}
 }
 const makeFakeSurvey = (): SurveyResultModel => <SurveyResultModel>({
-    accountId: "any_account",
+    accountId: "any_account_id",
     id: "any_id",
     date: new Date(),
     answers: [
-        {answer:"any_answer", percent: 50, count: 1},
-        {answer:"other_answer", percent: 50, count: 1, image:"any_image"}
+        {answer: "any_answer", percent: 50, count: 1, isCurrentAnswer: true},
+        {answer: "other_answer", percent: 50, count: 1, image: "any_image", isCurrentAnswer: false}
     ],
     surveyId: "any_survey_id",
     question: 'any_question'
@@ -51,25 +51,25 @@ describe("DB Save Survey Result", () => {
         const spyLoadRepository = jest.spyOn(loadSurveyResultRepository, "loadBySurveyId")
 
         await sut.save({
-            accountId: "any_account",
+            accountId: "any_account_id",
             date: new Date(),
             answer: "any_answer",
             surveyId: "any_survey_id"
         });
 
         expect(spySaveRepository).toHaveBeenCalledWith({
-            accountId: "any_account",
+            accountId: "any_account_id",
             date: new Date(),
             answer: "any_answer",
             surveyId: "any_survey_id"
         })
-        expect(spyLoadRepository).toHaveBeenCalledWith("any_survey_id")
+        expect(spyLoadRepository).toHaveBeenCalledWith("any_survey_id", "any_account_id")
     })
     test("Should throw when save repository throws", async () => {
         const {sut, saveSurveyResultRepository} = makeSUT();
         jest.spyOn(saveSurveyResultRepository, "save").mockImplementationOnce(throwError)
         const result = sut.save({
-            accountId: "any_account",
+            accountId: "any_account_id",
             date: new Date(),
             answer: "any_answer",
             surveyId: "any_survey_id"

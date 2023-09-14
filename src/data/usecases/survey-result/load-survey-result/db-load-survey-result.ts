@@ -9,8 +9,8 @@ export class DbLoadSurveyResult implements LoadSurveyResult {
     constructor(private readonly repository: LoadSurveyResultRepository, private readonly loadSurvey: ListSurveyRepository) {
     }
 
-    async load(surveyId: string): Promise<SurveyResultModel> {
-        const surveyResult = await this.repository.loadBySurveyId(surveyId);
+    async load(surveyId: string,  accountId: string): Promise<SurveyResultModel> {
+        const surveyResult = await this.repository.loadBySurveyId(surveyId, accountId);
         if (!surveyResult) {
             const survey = await this.loadSurvey.loadById(surveyId);
             return survey === null ? null : {
@@ -22,7 +22,8 @@ export class DbLoadSurveyResult implements LoadSurveyResult {
                         answer: a.answer,
                         percent: 0,
                         count: 0,
-                        image: a.image
+                        image: a.image,
+                        isCurrentAnswer: false
                     };
                 })
             }

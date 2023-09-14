@@ -8,12 +8,14 @@ export const makeFakeSurveyResult = (): SurveyResultModel => ({
         count: 1,
         image: "any_image",
         percent: 50,
+        isCurrentAnswer: true
     },
         {
             answer: "other_answer",
             count: 1,
             image: "other_image",
             percent: 50,
+            isCurrentAnswer: false
         }],
     question: "any_question"
 });

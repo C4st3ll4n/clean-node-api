@@ -10,7 +10,7 @@ export class LoadSurveyResultController implements Controller{
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
         try {
             const {surveyId} = httpRequest.params;
-            const surveyResult = await this.loadSurveyResult.load(surveyId)
+            const surveyResult = await this.loadSurveyResult.load(surveyId, httpRequest.accountId)
             if (surveyResult) {
                 return ok(surveyResult);
             } else {

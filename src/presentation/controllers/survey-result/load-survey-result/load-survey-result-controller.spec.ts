@@ -19,7 +19,7 @@ type SUTTypes = {
 
 const mockLoadSurveyResult = () : LoadSurveyResult => {
     return new class LoadSurveyResultSub implements LoadSurveyResult{
-        async load(surveyId:string): Promise<SurveyResultModel> {
+        async load(surveyId:string, accountId): Promise<SurveyResultModel> {
             return Promise.resolve(makeFakeSurveyResult());
         }
     }
@@ -52,7 +52,7 @@ describe("Load Survey Result Controller", () => {
             const {sut, loadSurveyResultStub} = makeSut();
             const spy = jest.spyOn(loadSurveyResultStub, "load")
             await sut.handle(makeRequest())
-            expect(spy).toHaveBeenCalledWith("any_survey_id")
+            expect(spy).toHaveBeenCalledWith("any_survey_id", "any_account_id")
         })
 
         test("should return 404 when LoadSurveyById returns null", async () => {

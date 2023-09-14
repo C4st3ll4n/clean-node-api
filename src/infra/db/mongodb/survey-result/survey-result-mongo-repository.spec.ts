@@ -20,7 +20,7 @@ const makeSurvey = async (): Promise<SurveyModel> => {
         date: new Date()
     })
     const survey = res.ops[0];
-    return  {
+    return {
         id: survey._id,
         answers: survey.answers,
         date: survey.date,
@@ -100,14 +100,14 @@ describe("Survey Result Mongo Repository", () => {
                 accountId: account.id,
             })
 
-                expect(surveyResult).toBeTruthy();
+            expect(surveyResult).toBeTruthy();
             expect(surveyResult.surveyId).toEqual(survey.id);
         });
 
         test("Should update a survey result", async () => {
             const survey = await makeSurvey();
             const account = await makeAccount();
-            const createdSurveyResult = await makeSurveyResult(account.id,survey.id )
+            const createdSurveyResult = await makeSurveyResult(account.id, survey.id)
 
             const sut = makeSut();
 
@@ -137,8 +137,8 @@ describe("Survey Result Mongo Repository", () => {
         });
     })
 
-    describe("Load Survey result", ()=>{
-        test("Should load a survey result", async () => {
+    describe("Load Survey result", () => {
+        test("Should load a survey result with true current answer", async () => {
             const survey = await makeSurvey();
             const account = await makeAccount();
             const sut = makeSut();
@@ -150,15 +150,30 @@ describe("Survey Result Mongo Repository", () => {
                 surveyId: survey.id
             });
 
-            const surveyResult = await sut.loadBySurveyId(survey.id);
+            const surveyResult = await sut.loadBySurveyId(survey.id, account.id);
 
             expect(surveyResult).toBeTruthy();
             expect(surveyResult.answers).toBeTruthy();
             expect(surveyResult.surveyId).toEqual(survey.id);
             expect(surveyResult.answers[0].answer).toEqual(survey.answers[0].answer);
+            expect(surveyResult.answers[0].isCurrentAnswer).toEqual(true);
             expect(surveyResult.answers[0].count).toEqual(1);
             expect(surveyResult.answers[0].percent).toEqual(100);
         });
 
+        test("Should load a survey result with false current answer", async () => {
+            const survey = await makeSurvey();
+            const account = await makeAccount();
+            const sut = makeSut();
+            const surveyResult = await sut.loadBySurveyId(survey.id, account.id);
+
+            expect(surveyResult).toBeTruthy();
+            expect(surveyResult.answers).toBeTruthy();
+            expect(surveyResult.surveyId).toEqual(survey.id);
+            expect(surveyResult.answers[0].answer).toEqual(survey.answers[0].answer);
+            expect(surveyResult.answers[0].isCurrentAnswer).toEqual(false);
+            expect(surveyResult.answers[0].count).toEqual(0);
+            expect(surveyResult.answers[0].percent).toEqual(0);
+        });
     })
 });
