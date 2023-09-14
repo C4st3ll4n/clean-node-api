@@ -4,6 +4,7 @@ import { AddAccount, AddAccountParam, AccountModel, HttpRequest, Validation, Aut
 import { serverError, badRequest, ok, forbidden } from "../../../helpers/http/http-helper"
 import {throwError} from "@/domain/test";
 import {makeValidationStub} from "@/validation/test";
+import {AuthenticationModel} from "@/domain/models/authentication";
 
 type SutTypes ={
     sut: SignUpController,
@@ -43,8 +44,11 @@ const makeAddAccount = (): AddAccount => {
 
 const makeAuth = (): Authentication => {
     class AuthStub implements Authentication {
-        async auth(email: AuthParam): Promise<string> {
-            return new Promise(resolve => resolve("any_token"))
+        async auth(email: AuthParam): Promise<AuthenticationModel> {
+            return new Promise(resolve => resolve({
+                name: "any_name",
+                accessToken: "any_token"
+            }))
         }
     }
 
@@ -105,7 +109,7 @@ describe("SignUp Controller", () => {
 
         const httpResponse = await sut.handle(makeHttpRequest())
 
-        expect(httpResponse).toEqual(ok({accessToken: "any_token"}))
+        expect(httpResponse).toEqual(ok({accessToken: "any_token", name:"any_name"}))
     })
 
     test("Should call Validation with correct values", async () => {
@@ -152,7 +156,8 @@ describe("SignUp Controller", () => {
 
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse).toEqual(ok({
-            accessToken: "any_token"
+            accessToken: "any_token",
+            name: "any_name"
         }))
     })
 })

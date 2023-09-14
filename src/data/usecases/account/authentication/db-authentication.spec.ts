@@ -110,7 +110,8 @@ describe("DbAuthentication UseCase", () => {
     test("Should return a access token", async () => {
         const { sut } = makeSut()
         const accessToken = await sut.auth(mockAuthParam())
-        expect(accessToken).toBe("valid_token")
+        expect(accessToken.accessToken).toBe("valid_token")
+        expect(accessToken.name).toBe("any_name")
     })
 
     test("Should call UpdateAccessTokenRepository with correct values", async () => {

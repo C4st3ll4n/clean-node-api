@@ -5,6 +5,7 @@ import { LoginController } from "./login-controller"
 import { HttpRequest, Authentication, AuthParam } from "./login-controller-protocols"
 import {throwError} from "@/domain/test";
 import {makeValidationStub} from "@/validation/test";
+import {AuthenticationModel} from "@/domain/models/authentication";
 
 type SutTypes ={
     sut: LoginController,
@@ -15,8 +16,11 @@ type SutTypes ={
 
 const makeAuth = (): Authentication => {
     class AuthStub implements Authentication {
-        async auth(email: AuthParam): Promise<string> {
-            return new Promise(resolve => resolve("any_token"))
+        async auth(email: AuthParam): Promise<AuthenticationModel> {
+            return new Promise(resolve => resolve({
+                name: "any_name",
+                accessToken: "any_token"
+            }))
         }
     }
 
@@ -146,8 +150,7 @@ describe("Login Controller", () => {
         const httpRequest = makeHttpRequest()
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse).toEqual(ok({
-            accessToken: "any_token"
-        }))
+        console.log(httpResponse)
+        expect(httpResponse).toEqual(ok({accessToken: "any_token", name:"any_name"}))
     })
 })

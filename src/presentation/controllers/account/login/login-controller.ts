@@ -19,9 +19,7 @@ export class LoginController implements Controller {
 
             if (!token) return unauthorized()
 
-            return ok({
-                accessToken: token
-            })
+            return ok(token)
 
         } catch (err) {
             console.log(err)
