@@ -1,0 +1,30 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+
+title "Survey API Components"
+
+Person(user,"User","Mobile/Web Application")
+System_Boundary(survey_system, "Survey System") {
+    ContainerDb(survey_db, "Survey database", "NoSQL Database", "Stores user registration information, hashed authentication credentials, surveys and answers.")
+    Container_Boundary(api, "API Application") {
+        Component(router,"Router","Express Routes")
+        Component(authentication,"Authentication","Authentication Middleware")
+        Component(controller,"Controller","Presentation Layer")
+        Component(usecase,"Use case","Business Layer")
+        Component(repository,"Repository","Data access")
+        Component(infra,"Infrastructure","Dependencies implementation")
+
+        Rel(router, authentication, "Validate access token", "HTTP Header")
+        Rel(authentication, controller, "Redirects")
+        Rel(controller, usecase, "Call")
+        Rel(usecase, repository, "Call")
+        Rel(repository, infra, "Uses")
+        Rel(infra, survey_db, "Read/Write", "MongoDB Driver")
+
+    }
+}
+
+Rel(user, api, "Consumes", "JSON/HTTP")
+
+@enduml
