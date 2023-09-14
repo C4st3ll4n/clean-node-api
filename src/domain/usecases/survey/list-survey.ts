@@ -1,5 +1,5 @@
 import { SurveyModel } from "../../models/survey";
 
 export interface ListSurvey{
-    getAll(): Promise<SurveyModel[]>
+    getAll(accountId: string): Promise<SurveyModel[]>
 }

@@ -21,7 +21,7 @@ export const makeListSurveyRepositoryStub = (): ListSurveyRepository => {
             ]);
         }
 
-        load(accountId: string): Promise<SurveyModel[]> {
+        loadByAccountID(accountId: string): Promise<SurveyModel[]> {
             return Promise.resolve([
                 makeFakeSurvey()
             ]);

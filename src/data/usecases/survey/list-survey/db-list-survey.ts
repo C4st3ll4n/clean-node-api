@@ -7,12 +7,9 @@ export class DBListSurvey implements ListSurvey, LoadSurveyById {
 
     constructor(private readonly repository: ListSurveyRepository) {
     }
-    async getAll(): Promise<SurveyModel[]> {
-        return await this.repository.all();
-    }
 
-    async load(accountId:string): Promise<SurveyModel[]> {
-        return await this.repository.load(accountId);
+    async getAll(accountId:string): Promise<SurveyModel[]> {
+        return await this.repository.loadByAccountID(accountId);
     }
 
     async loadById(surveyID: string): Promise<SurveyModel> {

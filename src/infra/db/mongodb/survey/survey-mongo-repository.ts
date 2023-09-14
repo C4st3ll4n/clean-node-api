@@ -3,6 +3,8 @@ import {AddSurveyParam} from "@/domain/usecases/survey/add-survey";
 import {MongoHelper} from "../helpers/mongo-helper";
 import {ListSurveyRepository} from "@/data/protocols/db/survey/list-survey-repository";
 import {SurveyModel} from "@/domain/models/survey";
+import {QueryBuilder} from "@/infra/db/mongodb/helpers";
+
 const ObjectId = require("mongodb").ObjectId;
 
 export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRepository {
@@ -23,8 +25,47 @@ export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRep
     }))
   }
 
-  load(accountId: string): Promise<SurveyModel[]> {
-    return Promise.resolve([]);
+  async loadByAccountID(accountId: string): Promise<SurveyModel[]> {
+    const surveyCollection = await MongoHelper.getCollection("surveys");
+
+    const query = new QueryBuilder()
+        .lookup({
+          from: "surveyResults",
+          foreignField: "surveyId",
+          localField: "_id",
+          as: "result"
+        })
+        .project({
+          _id: 1,
+          question: 1,
+          answers: 1,
+          date: 1,
+          didAnswer: {
+            $gte: [{
+              $size:{
+                $filter: {
+                  input: "$result",
+                  as: "it",
+                  cond: {
+                    $eq: ["$$it.accountId", accountId],
+                  }
+                }
+              },
+            }, 1
+            ],
+          }
+        }).build()
+
+    const surveys = await surveyCollection.aggregate(query).toArray()
+    if(!surveys) return []
+
+    return surveys.map((value): SurveyModel => ({
+      question: value.question,
+      id: value._id,
+      date: value.date,
+      answers: value.answers,
+      didAnswer: value.didAnswer
+    }));
   }
 
   async loadById(surveyId: string): Promise<SurveyModel> {

@@ -1,5 +1,4 @@
 import {ListSurveyRepository} from "@/data/protocols/db/survey/list-survey-repository";
-import {SurveyModel} from "@/domain/models/survey";
 import {DBListSurvey} from "./db-list-survey";
 import * as mockdate from "mockdate";
 import {throwError} from "@/domain/test";
@@ -10,17 +9,6 @@ type SUTTypes = {
     repository: ListSurveyRepository
 }
 
-const makeFakeSurvey = (): SurveyModel => <SurveyModel>({
-    question: "any_question",
-    answers: [
-        {
-            image: "any_image",
-            answer: "any_answer"
-        }
-    ],
-    id: "any_id",
-    date: new Date()
-});
 
 const makeSUT = (): SUTTypes => {
     const repository = makeListSurveyRepositoryStub()
@@ -38,15 +26,15 @@ describe("DbListSurvey Usecase", () => {
 
         test("Should call ListSurveyRepository correctly", async () => {
             const {sut, repository} = makeSUT()
-            const spyRepository = jest.spyOn(repository, "all")
-            await sut.getAll();
+            const spyRepository = jest.spyOn(repository, "loadByAccountID")
+            await sut.getAll("any_account_id");
 
-            expect(spyRepository).toHaveBeenCalled()
+            expect(spyRepository).toHaveBeenCalledWith("any_account_id")
         })
 
         test("Should return a valid list from ListSurveyRepository", async () => {
             const {sut} = makeSUT()
-            const listReponse = await sut.getAll();
+            const listReponse = await sut.getAll("any_account_id");
             expect(listReponse).toBeTruthy()
             expect(listReponse[0]).toBeTruthy()
             expect(listReponse[0].id).toEqual("any_survey_id")
@@ -54,8 +42,8 @@ describe("DbListSurvey Usecase", () => {
 
         test("Should throw when ListSurveyRepository throws", () => {
             const {sut, repository} = makeSUT();
-            jest.spyOn(repository, "all").mockImplementationOnce(throwError)
-            const result = sut.getAll();
+            jest.spyOn(repository, "loadByAccountID").mockImplementationOnce(throwError)
+            const result = sut.getAll("any_account_id");
 
             expect(result).rejects.toThrow()
         })

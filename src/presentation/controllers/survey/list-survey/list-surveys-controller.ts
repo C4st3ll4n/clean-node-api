@@ -9,7 +9,7 @@ export class ListSurveysController implements Controller {
 
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
         try {
-            const surveys = await this.listSurveys.getAll();
+            const surveys = await this.listSurveys.getAll(httpRequest.accountId);
             if (surveys.length === 0) {
                 return notFound("No survey found")
             }

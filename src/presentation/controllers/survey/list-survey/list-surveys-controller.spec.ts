@@ -4,6 +4,7 @@ import {ListSurveysController} from "./list-surveys-controller";
 import * as mockdate from "mockdate";
 import {serverError} from "../../../helpers/http/http-helper";
 import {makeFakeSurvey} from "@/domain/test";
+import {HttpRequest} from "@/presentation/protocols";
 
 type SUTTYpes ={
     sut: ListSurveysController,
@@ -24,6 +25,9 @@ const makeSUT = (): SUTTYpes => {
     const sut = new ListSurveysController(listSurveys)
     return {sut, listSurveys}
 }
+const httpRequest: HttpRequest = {
+    accountId: "any_account_id"
+};
 describe("ListSurveys Controller", () => {
 
     beforeAll(()=>{
@@ -33,14 +37,14 @@ describe("ListSurveys Controller", () => {
     test("Should call ListSurvey correctly", async () => {
         const {sut, listSurveys} = makeSUT()
         const loadSpy = jest.spyOn(listSurveys, "getAll")
-        await sut.handle({})
+        await sut.handle(httpRequest)
         expect(loadSpy).toHaveBeenCalled()
     })
 
     test("Should return a valid 200 with survey list", async()=>{
 
         const {sut} = makeSUT()
-        const listReponse = await sut.handle({})
+        const listReponse = await sut.handle(httpRequest)
 
         expect(listReponse.statusCode).toEqual(200)
         expect(listReponse.body).toBeTruthy()
@@ -52,7 +56,7 @@ describe("ListSurveys Controller", () => {
     test("Should return 500 when ListSurvey throws", async () => {
         const {sut, listSurveys} = makeSUT()
         jest.spyOn(listSurveys, "getAll").mockReturnValueOnce(new Promise((_resolve, reject) => reject(new Error())));
-        const promise = await sut.handle({})
+        const promise = await sut.handle(httpRequest)
         expect(promise).toEqual(serverError(new Error()))
     })
 
@@ -60,7 +64,7 @@ describe("ListSurveys Controller", () => {
 
         const {sut, listSurveys} = makeSUT()
         jest.spyOn(listSurveys, "getAll").mockReturnValueOnce(Promise.resolve([]));
-        const listReponse = await sut.handle({})
+        const listReponse = await sut.handle(httpRequest)
 
         expect(listReponse.statusCode).toEqual(404)
 
