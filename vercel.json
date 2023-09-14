@@ -11,5 +11,8 @@
       "src": "/(.*)",
       "dest": "/"
     }
-  ]
+  ],
+  "env": {
+    "MONGO_URL": "mongodb://mongo-db-root:mongo-db-root@cluster0.r9j05sd.mongodb.net/?retryWrites=true&w=majority"
+  }
 }
