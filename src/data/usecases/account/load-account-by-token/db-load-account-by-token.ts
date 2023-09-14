@@ -4,20 +4,27 @@ import {LoadAccountByTokenRepository} from "@/data/protocols/db/account/load-acc
 import {AccountModel} from "@/domain/models/account";
 
 export class DBLoadAccountByToken implements LoadAccountByToken {
-  constructor(
-    private readonly decrypter: Decrypter,
-    private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository
-  ) {}
-
-  async loadByToken(token: string, role?: string): Promise<AccountModel> {
-    const decryptedToken = await this.decrypter.decrypt(token);
-    if (decryptedToken) {
-      return this.loadAccountByTokenRepository.loadByToken(
-          token,
-          role
-      );
+    constructor(
+        private readonly decrypter: Decrypter,
+        private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository
+    ) {
     }
 
-    return null;
-  }
+    async loadByToken(token: string, role?: string): Promise<AccountModel> {
+        let decryptedToken;
+        try {
+            decryptedToken = await this.decrypter.decrypt(token);
+        } catch (e) {
+            return null
+        }
+
+        if (decryptedToken) {
+            return this.loadAccountByTokenRepository.loadByToken(
+                token,
+                role
+            );
+        }
+
+        return null;
+    }
 }
