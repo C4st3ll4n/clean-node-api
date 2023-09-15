@@ -1,4 +1,4 @@
 export type Answer = {
-    image: string,
+    image?: string,
     answer: string
 }

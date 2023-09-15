@@ -10,7 +10,6 @@ import {
 import {LoadSurveyResult} from "@/domain/usecases/survey-result/load-survey-result";
 import {SurveyResultModel} from "@/domain/models/survey-result";
 import {throwError} from "@/domain/test";
-import e from "express";
 
 type SUTTypes = {
     sut: LoadSurveyResultController,
@@ -33,12 +32,10 @@ const makeSut = (): SUTTypes => {
     }
 }
 
-const makeRequest = (): HttpRequest => {
+const makeRequest = (): LoadSurveyResultController.Request => {
     return {
-        params: {
-            surveyId: "any_survey_id"
-        },
-        accountId: "any_account_id"
+        surveyId: "any_survey_id",
+        accountId: "any_account_id",
     };
 };
 describe("Load Survey Result Controller", () => {

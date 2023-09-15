@@ -4,8 +4,9 @@ import { HttpRequest, HttpResponse } from "@/presentation/protocols";
 
 export const adaptMiddleware = (middlewares: Middleware) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const httpRequest: HttpRequest = {
-      headers: req.headers,
+    const httpRequest = {
+      token : req.headers?.['x-access-token'],
+      ...(req.headers||{}),
     };
 
     const httpResponse: HttpResponse = await middlewares.handle(httpRequest);

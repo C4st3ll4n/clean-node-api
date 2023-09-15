@@ -6,7 +6,7 @@ import {serverError} from "../../../helpers/http/http-helper";
 import {makeFakeSurvey} from "@/domain/test";
 import {HttpRequest} from "@/presentation/protocols";
 
-type SUTTYpes ={
+type SUTTypes ={
     sut: ListSurveysController,
     listSurveys: ListSurvey
 }
@@ -20,12 +20,12 @@ const makeListSurveyStub = (): ListSurvey =>
             ]);
         }
     };
-const makeSUT = (): SUTTYpes => {
+const makeSUT = (): SUTTypes => {
     const listSurveys = makeListSurveyStub()
     const sut = new ListSurveysController(listSurveys)
     return {sut, listSurveys}
 }
-const httpRequest: HttpRequest = {
+const httpRequest: ListSurveysController.Request = {
     accountId: "any_account_id"
 };
 describe("ListSurveys Controller", () => {

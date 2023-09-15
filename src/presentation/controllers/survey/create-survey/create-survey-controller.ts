@@ -13,13 +13,13 @@ export class CreateSurveyController implements Controller {
     private readonly addSurvey: AddSurvey
   ) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const error = this.validation.validate(httpRequest.body);
+  async handle(httpRequest: CreateSurveyController.Request): Promise<HttpResponse> {
+    const error = this.validation.validate(httpRequest);
     if (error) {
       return badRequest(error);
     }
 
-    const { question, answers } = httpRequest.body;
+    const { question, answers } = httpRequest;
     try {
       await this.addSurvey.add({
         question,
@@ -31,5 +31,17 @@ export class CreateSurveyController implements Controller {
     } catch (error) {
       return serverError(error);
     }
+  }
+}
+
+export namespace CreateSurveyController {
+  export type Request = {
+    question: string
+    answers: Answer[]
+  }
+
+  type Answer = {
+    image?: string
+    answer: string
   }
 }

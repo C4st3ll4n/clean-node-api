@@ -7,7 +7,7 @@ export class ListSurveysController implements Controller {
     constructor(private readonly listSurveys: ListSurvey) {
     }
 
-    async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+    async handle(httpRequest: ListSurveysController.Request): Promise<HttpResponse> {
         try {
             const surveys = await this.listSurveys.getAll(httpRequest.accountId);
             if (surveys.length === 0) {
@@ -17,7 +17,11 @@ export class ListSurveysController implements Controller {
         } catch (e) {
             return serverError(e);
         }
-
     }
+}
 
+export namespace ListSurveysController {
+    export type Request = {
+        accountId: string
+    }
 }

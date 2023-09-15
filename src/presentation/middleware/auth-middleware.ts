@@ -5,7 +5,7 @@ import {
     ok,
     serverError,
     HttpResponse,
-    Middleware, HttpRequest,
+    Middleware,
 } from "./auth-middleware-protocols";
 
 export class AuthMiddleware implements Middleware {
@@ -15,9 +15,9 @@ export class AuthMiddleware implements Middleware {
     ) {
     }
 
-    async handle(request: HttpRequest): Promise<HttpResponse> {
+    async handle(request: AuthMiddleware.Request): Promise<HttpResponse> {
         try {
-            const token = request.headers?.['x-access-token'];
+            const {token} = request
             if (token) {
                 const account = await this.loadAccountToken.loadByToken(token, this.role);
                 if (account) {

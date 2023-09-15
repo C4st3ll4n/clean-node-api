@@ -6,14 +6,14 @@ export class LoginController implements Controller {
 
     constructor(private readonly validation: Validation, private readonly authentication: Authentication) { }
 
-    async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+    async handle(httpRequest: LoginController.Request): Promise<HttpResponse> {
         try {
 
-            const error = this.validation.validate(httpRequest.body)
+            const error = this.validation.validate(httpRequest)
 
             if (error) return badRequest(error)
 
-            const { password, email } = httpRequest.body
+            const { password, email } = httpRequest
 
             const token = await this.authentication.auth({ email, password })
 
@@ -26,5 +26,11 @@ export class LoginController implements Controller {
             return serverError(err)
         }
     }
+}
 
+export namespace LoginController {
+    export type Request = {
+        password:string
+        email: string
+    }
 }

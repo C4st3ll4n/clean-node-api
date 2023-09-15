@@ -7,14 +7,14 @@ export class SignUpController implements Controller {
   constructor(private readonly addAccount: AddAccount, private readonly validation: Validation, private readonly authentication: Authentication) {
   }
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(httpRequest: SignUpController.Request): Promise<HttpResponse> {
     try {
 
-      const error = this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(httpRequest)
       
       if(error) return badRequest(error)
       
-      const { name, email, password } = httpRequest.body
+      const { name, email, password } = httpRequest
 
       const account = await this.addAccount.add({
         name, email, password
@@ -33,4 +33,13 @@ export class SignUpController implements Controller {
     }
   }
 
+}
+
+export namespace SignUpController {
+  export type Request = {
+    email: string
+    password: string,
+    passwordConfirmation: string
+    name: string
+  }
 }

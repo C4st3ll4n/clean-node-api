@@ -2,9 +2,9 @@ import { Controller, HttpRequest, HttpResponse } from "@/presentation/protocols"
 import { Request, Response } from "express";
 export const adaptRoute = (controller: Controller) => {
     return async (req: Request, res: Response) => {
-        const httpReq: HttpRequest = {
-            body: req.body,
-            params: req.params,
+        const httpReq = {
+            ...(req.body || {}),
+            ...(req.params || {}),
             accountId: req.accountId
         }
         const httpRes: HttpResponse = await controller.handle(httpReq)

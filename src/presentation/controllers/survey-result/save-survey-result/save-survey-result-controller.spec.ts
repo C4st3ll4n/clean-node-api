@@ -1,14 +1,12 @@
 import {
     SaveSurveyResultController
 } from "@/presentation/controllers/survey-result/save-survey-result/save-survey-result-controller";
-import {HttpRequest} from "@/presentation/protocols";
 import {LoadSurveyById} from "@/domain/usecases/survey/load-survey-by-id";
 import {SurveyModel} from "@/domain/models/survey";
 import {badRequest, ok, serverError} from "@/presentation/helpers/http/http-helper";
 import {SaveSurveyResult, SaveSurveyResultParam} from "@/domain/usecases/survey-result/save-survey-result";
 import {SurveyResultModel} from "@/domain/models/survey-result";
 import {InvalidParamError} from "@/presentation/errors";
-import {AccountModel} from "@/domain/models/account";
 import mockdate from "mockdate";
 import {makeFakeSurveyResult} from "@/domain/test/mock-survey-result";
 
@@ -18,25 +16,25 @@ type SUTTypes = {
     saveSurveyResult: SaveSurveyResult
 }
 
-const makeSurveyModel = ():SurveyModel => {
+const makeSurveyModel = (): SurveyModel => {
     return {
         id: "any_survey_id",
         date: new Date(),
         question: "any_question",
         answers: [
-            {image:"any_image", answer:"any_answer"},
-            {image:"other_image", answer:"other_answer"},
+            {image: "any_image", answer: "any_answer"},
+            {image: "other_image", answer: "other_answer"},
         ]
     };
 };
-const makeLoadSurveyStub = ():LoadSurveyById => {
-  class LoadSurveyByIdStub implements LoadSurveyById{
-      async loadById(id: string): Promise<SurveyModel> {
-          return Promise.resolve(makeSurveyModel());
-      }
-  }
+const makeLoadSurveyStub = (): LoadSurveyById => {
+    class LoadSurveyByIdStub implements LoadSurveyById {
+        async loadById(id: string): Promise<SurveyModel> {
+            return Promise.resolve(makeSurveyModel());
+        }
+    }
 
-  return new LoadSurveyByIdStub();
+    return new LoadSurveyByIdStub();
 };
 const makeSaveSurveyResult = (): SaveSurveyResult => {
     class SaveSurveyResultStub implements SaveSurveyResult {
@@ -48,13 +46,7 @@ const makeSaveSurveyResult = (): SaveSurveyResult => {
     return new SaveSurveyResultStub();
 };
 
-const makeAccount = (): AccountModel => ({
-    id: "any_account_id",
-    email: "any_email",
-    name: "any_name",
-    password: "any_password"
-});
-const makeSut = ():SUTTypes=>{
+const makeSut = (): SUTTypes => {
     const loadSurveyStub = makeLoadSurveyStub()
     const saveSurveyResult = makeSaveSurveyResult()
     const sut = new SaveSurveyResultController(loadSurveyStub, saveSurveyResult)
@@ -65,20 +57,17 @@ const makeSut = ():SUTTypes=>{
     }
 }
 
-const makeRequest = ():HttpRequest => {
+const makeRequest = (): SaveSurveyResultController.Request => {
     return {
-        params:{
-            surveyId: "any_survey_id"
-        },
-        body: {
-            answer: "any_answer"
-        },
-        accountId: "any_account_id"
+        surveyId: "any_survey_id",
+        answer: "any_answer",
+        accountId: "any_account_id",
+
     };
 };
-describe("Save SurveyResult Controller", ()=>{
+describe("Save SurveyResult Controller", () => {
 
-    beforeAll(()=>{
+    beforeAll(() => {
         mockdate.set(new Date())
     })
 
@@ -146,12 +135,9 @@ describe("Save SurveyResult Controller", ()=>{
     test("Should return 403 when invalid answer is provided", async () => {
         const {sut} = makeSut();
         const response = await sut.handle({
-            params: {
-                survey_id: "any_survey_id"
-            },
-            body: {
-                answer: "wrong answer"
-            }
+            surveyId: "any_survey_id",
+            accountId: "any_account_id",
+            answer: "wrong answer"
         })
         expect(response.statusCode).toEqual(400)
         expect(response).toEqual(badRequest(new InvalidParamError("answer")))

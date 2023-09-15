@@ -21,7 +21,7 @@ const makeHttpRequest = (): HttpRequest => ({
 
 const makeStub = ():Controller => {
     class ControllerStub implements Controller{
-        handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+        handle(httpRequest: any): Promise<HttpResponse> {
             const httpResponse: HttpResponse= {
                 statusCode: 200,
                 body:{

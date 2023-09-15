@@ -13,13 +13,11 @@ type SutTypes ={
     authentication: Authentication
 }
 
-const makeHttpRequest = (): HttpRequest => ({
-    body: {
+const makeHttpRequest = (): SignUpController.Request => ({
         name: "any_name",
         email: "valid_email@mail.com",
         password: "any_password",
         passwordConfirmation: "any_password"
-    }
 })
 
 const makeAccountModel = (): AccountModel => (
@@ -117,7 +115,7 @@ describe("SignUp Controller", () => {
         const addSpySpy = jest.spyOn(validationStub, 'validate')
         const httpRequest = makeHttpRequest()
         await sut.handle(httpRequest)
-        expect(addSpySpy).toHaveBeenCalledWith(httpRequest.body)
+        expect(addSpySpy).toHaveBeenCalledWith(httpRequest)
     })    
 
     test("Should return 400 if validation returns an error", async () => {

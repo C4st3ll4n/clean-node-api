@@ -10,10 +10,9 @@ export class SaveSurveyResultController implements Controller{
                 private readonly saveResult: SaveSurveyResult) {
     }
 
-    async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+    async handle(httpRequest: SaveSurveyResultController.Request): Promise<HttpResponse> {
         try {
-            const {surveyId} = httpRequest.params;
-            const {answer} = httpRequest.body;
+            const {surveyId, answer, accountId} = httpRequest;
 
             const survey = await this.loadSurvey.loadById(surveyId)
 
@@ -26,7 +25,7 @@ export class SaveSurveyResultController implements Controller{
                     surveyId:surveyId,
                     answer:answer,
                     date: new Date(),
-                    accountId: httpRequest.accountId
+                    accountId: accountId
                 })
                 if(!saveSurveyResult){
                     return badRequest(new Error("Something went wrong, try again later."))
@@ -43,4 +42,12 @@ export class SaveSurveyResultController implements Controller{
 
     }
 
+}
+
+export namespace SaveSurveyResultController {
+ export type Request = {
+     surveyId: string
+     answer: string
+     accountId: string
+ }
 }

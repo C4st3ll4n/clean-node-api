@@ -25,12 +25,9 @@ const makeAddSurveyStub = (): AddSurvey => {
     return new AddSurveyStub();
 };
 
-const makeFakeRequest = (): HttpRequest => ({
-    body: {
+const makeFakeRequest = (): CreateSurveyController.Request => ({
         question: "any_question",
         answers: [{image: "any_image", answer: "any_answer"}],
-        date: new Date()
-    },
 });
 
 const makeSut = (): SUTTypes => {
@@ -59,7 +56,7 @@ describe("CreateSurvey Controller", () => {
 
         await sut.handle(httpRequest);
 
-        expect(validateSpy).toBeCalledWith(httpRequest.body);
+        expect(validateSpy).toBeCalledWith(httpRequest);
     });
 
     test("Should return 400 when Validation fails", async () => {
@@ -82,7 +79,8 @@ describe("CreateSurvey Controller", () => {
 
         await sut.handle(httpRequest);
 
-        expect(addSpy).toBeCalledWith(httpRequest.body);
+
+        expect(addSpy).toBeCalledWith({...httpRequest, date: new Date()});
     });
 
     test("Should return 500 when AddSurvey fails", async () => {
