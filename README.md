@@ -20,5 +20,5 @@ O objetivo é de criar uma API com uma arquitetura bem definida e desacoplada co
 - Adapter
 
 
-## Como roder
+## Como rodar
 `npm run up` ou `npm run build` e depois `docker compose up`

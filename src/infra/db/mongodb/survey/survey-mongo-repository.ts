@@ -1,23 +1,21 @@
 import {AddSurveyRepository} from "@/data/protocols/db/survey/add-survey-repository";
 import {MongoHelper} from "../helpers/mongo-helper";
 import {ListSurveyRepository} from "@/data/protocols/db/survey/list-survey-repository";
-import {SurveyModel} from "@/domain/models/survey";
 import {QueryBuilder} from "@/infra/db/mongodb/helpers";
-import {AddSurvey} from "@/domain/usecases/survey/add-survey";
 
 const ObjectId = require("mongodb").ObjectId;
 
 export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRepository {
-    async add(data: AddSurvey.Param): Promise<void> {
+    async add(data: AddSurveyRepository.Param): Promise<void> {
         const surveyCollection = await MongoHelper.getCollection("surveys");
         await surveyCollection.insertOne(data);
     }
 
-    async all(): Promise<SurveyModel[]> {
+    async all(): Promise<ListSurveyRepository.Results> {
         const surveyCollection = await MongoHelper.getCollection("surveys");
         const surveys: any[] = await surveyCollection.find().toArray();
         if (surveys.length == 0) return [];
-        return surveys.map((value): SurveyModel => ({
+        return surveys.map((value):ListSurveyRepository.Result => ({
             question: value.question,
             id: value._id,
             date: value.date,
@@ -25,7 +23,7 @@ export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRep
         }))
     }
 
-    async loadByAccountID(accountId: string): Promise<SurveyModel[]> {
+    async loadByAccountID(accountId: string): Promise<ListSurveyRepository.Results> {
         const surveyCollection = await MongoHelper.getCollection("surveys");
 
         const query = new QueryBuilder()
@@ -59,7 +57,7 @@ export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRep
         const surveys = await surveyCollection.aggregate(query).toArray()
         if (!surveys) return []
 
-        return surveys.map((value): SurveyModel => ({
+        return surveys.map((value): ListSurveyRepository.Result => ({
             question: value.question,
             id: value._id,
             date: value.date,
@@ -68,7 +66,7 @@ export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRep
         }));
     }
 
-    async loadById(surveyId: string): Promise<SurveyModel> {
+    async loadById(surveyId: string): Promise<ListSurveyRepository.Result> {
         const surveyCollection = await MongoHelper.getCollection("surveys")
 
         const survey = await surveyCollection.findOne({_id: new ObjectId(surveyId)})

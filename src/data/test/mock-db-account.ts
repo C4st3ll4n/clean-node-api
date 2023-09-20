@@ -4,7 +4,6 @@ import {mockAccount} from "@/domain/test";
 import {LoadAccountByEmailRepository} from "@/data/protocols/db/account/load-account-by-email-repository";
 import {LoadAccountByTokenRepository} from "@/data/protocols/db/account/load-account-by-token-repository";
 import {UpdateAcessTokenRepository} from "@/data/protocols/db/account/update-access-token-repository";
-import {AddAccount} from "@/domain/usecases/account/add-account";
 
 
 export const makeAddAccountRepositoryStub = (): AddAccountRepository => {
@@ -34,6 +33,12 @@ export const makeLoadAccountByTokenStub = (): LoadAccountByTokenRepository => {
         implements LoadAccountByTokenRepository {
         async loadByToken(token: string, role?: string): Promise<AccountModel> {
             return Promise.resolve(mockAccount());
+        }
+
+        loadAccountIdByToken(accessToken: string, role?: string): Promise<LoadAccountByTokenRepository.AccountIdResultResult> {
+            return Promise.resolve({
+                id: mockAccount().id
+            });
         }
     }
 
