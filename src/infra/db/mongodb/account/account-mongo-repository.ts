@@ -2,9 +2,9 @@ import {AddAccountRepository} from "@/data/protocols/db/account/add-account-repo
 import {LoadAccountByEmailRepository} from "@/data/protocols/db/account/load-account-by-email-repository";
 import {UpdateAcessTokenRepository} from "@/data/protocols/db/account/update-access-token-repository";
 import {AccountModel} from "@/domain/models/account";
-import {AddAccountParam} from "@/domain/usecases/account/add-account";
 import {LoadAccountByToken} from "@/domain/usecases/account/load-account-by-token";
 import {MongoHelper} from "../helpers/mongo-helper";
+import {AddAccount} from "@/domain/usecases/account/add-account";
 
 const ObjectId = require("mongodb").ObjectId;
 
@@ -13,7 +13,7 @@ export class AccountMongoRepository
         LoadAccountByEmailRepository,
         UpdateAcessTokenRepository,
         LoadAccountByToken {
-    async add(accountData: AddAccountParam): Promise<AccountModel> {
+    async add(accountData: AddAccount.Params): Promise<AccountModel> {
         const accountCollection = await MongoHelper.getCollection("accounts");
         const result = await accountCollection.insertOne(accountData);
 

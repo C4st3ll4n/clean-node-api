@@ -5,7 +5,7 @@ import {
 } from "../../../protocols";
 import {CreateSurveyController} from "./create-survey-controller";
 import {badRequest, noContent, serverError} from "../../../helpers/http/http-helper";
-import {AddSurvey, AddSurveyParam} from "./create-survey-protocols";
+import {AddSurvey} from "./create-survey-protocols";
 import * as mockdate from "mockdate";
 import {makeValidationStub} from "@/validation/test";
 
@@ -17,7 +17,7 @@ type SUTTypes ={
 
 const makeAddSurveyStub = (): AddSurvey => {
     class AddSurveyStub implements AddSurvey {
-        async add(input: AddSurveyParam): Promise<void> {
+        async add(input: AddSurvey.Param): Promise<void> {
             return Promise.resolve();
         }
     }

@@ -79,7 +79,7 @@ describe("DbAddAccount Usecase", () => {
       const { sut } = makeSut();
 
       const account = await sut.add(mockAccountParam());
-      expect(account).toEqual(mockAccount());
+      expect(account).toEqual(true);
     });
   });
 
@@ -94,7 +94,7 @@ describe("DbAddAccount Usecase", () => {
     });
   });
 
-  test("Should return null when LoadAccountByEmailRepository not returns null", async () => {
+  test("Should return false when LoadAccountByEmailRepository returns an account", async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
 
     jest.spyOn(loadAccountByEmailRepositoryStub, "loadByEmail").mockReturnValueOnce(
@@ -102,6 +102,12 @@ describe("DbAddAccount Usecase", () => {
     )
 
     const account = await sut.add(mockAccountParam());
-    expect(account).toBeNull();
+    expect(account).toBe(false);
+  });
+
+  test("Should return true when LoadAccountByEmailRepository returns null", async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    const account = await sut.add(mockAccountParam());
+    expect(account).toBe(true);
   });
 });

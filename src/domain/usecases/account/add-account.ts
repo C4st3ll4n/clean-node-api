@@ -10,5 +10,5 @@ export namespace AddAccount {
         email: string,
         password: string
     }
-    export type Result = AccountModel
+    export type Result = Boolean
 }

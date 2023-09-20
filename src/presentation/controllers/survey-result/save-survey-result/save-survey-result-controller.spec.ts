@@ -4,7 +4,7 @@ import {
 import {LoadSurveyById} from "@/domain/usecases/survey/load-survey-by-id";
 import {SurveyModel} from "@/domain/models/survey";
 import {badRequest, ok, serverError} from "@/presentation/helpers/http/http-helper";
-import {SaveSurveyResult, SaveSurveyResultParam} from "@/domain/usecases/survey-result/save-survey-result";
+import {SaveSurveyResult} from "@/domain/usecases/survey-result/save-survey-result";
 import {SurveyResultModel} from "@/domain/models/survey-result";
 import {InvalidParamError} from "@/presentation/errors";
 import mockdate from "mockdate";
@@ -38,7 +38,7 @@ const makeLoadSurveyStub = (): LoadSurveyById => {
 };
 const makeSaveSurveyResult = (): SaveSurveyResult => {
     class SaveSurveyResultStub implements SaveSurveyResult {
-        async save(data: SaveSurveyResultParam): Promise<SurveyResultModel> {
+        async save(data: SaveSurveyResult.Param): Promise<SaveSurveyResult.Result> {
             return Promise.resolve(makeFakeSurveyResult());
         }
     }

@@ -1,30 +1,30 @@
 import {
-  AccountModel,
-  AddAccount,
-  AddAccountParam,
-  AddAccountRepository,
-  Hasher,
-  LoadAccountByEmailRepository,
+    AccountModel,
+    AddAccount,
+    AddAccountRepository,
+    Hasher,
+    LoadAccountByEmailRepository,
 } from "./db-add-account-protocols";
 
 export class DbAddAccount implements AddAccount {
-  constructor(
-    private readonly hasher: Hasher,
-    private readonly addAccountRepository: AddAccountRepository,
-    private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository
-  ) {}
-
-  async add(accountData: AddAccountParam): Promise<AccountModel> {
-    const account = await this.loadAccountByEmailRepository.loadByEmail(
-      accountData.email
-    );
-    if (!account) {
-      const encryptedPassword = await this.hasher.hash(accountData.password);
-      return await this.addAccountRepository.add(
-          Object.assign({}, accountData, {password: encryptedPassword})
-      );
+    constructor(
+        private readonly hasher: Hasher,
+        private readonly addAccountRepository: AddAccountRepository,
+        private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository
+    ) {
     }
 
-    return null;
-  }
+    async add(accountData: AddAccount.Params): Promise<AddAccount.Result> {
+        const account = await this.loadAccountByEmailRepository.loadByEmail(accountData.email);
+        let newAccount: AccountModel = null
+
+        if (!account) {
+            const encryptedPassword: string = await this.hasher.hash(accountData.password);
+            newAccount = await this.addAccountRepository.add({
+                ...accountData, password: encryptedPassword
+            })
+        }
+
+        return newAccount != null;
+    }
 }
