@@ -1,11 +1,17 @@
-import {gql} from "apollo-server-express";
+import { gql } from "apollo-server-express";
 
 export default gql`
-    type Query {
-     _: String
-    }
-    
-    type Mutation {
-     _: String
-    }
-`
+  scalar DateTimeISO
+
+  type Query {
+    _: String
+  }
+
+  type Mutation {
+    _: String
+  }
+
+  type AccessToken {
+    accessToken: String!
+  }
+`;

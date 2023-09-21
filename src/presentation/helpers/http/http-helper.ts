@@ -14,12 +14,12 @@ export const unauthorized = (): HttpResponse => ({
 
 export const notFound = (message?:string): HttpResponse => ({
     statusCode: 404,
-    body: message??"No entry founds"
+    body: new Error(message??"No entry founds")
 })
 
 export const forbidden = (error: Error): HttpResponse => ({
     statusCode: 403,
-    body: error
+    body: new Error(error.message)
 })
 
 export const serverError = (error:Error): HttpResponse => ({

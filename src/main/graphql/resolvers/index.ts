@@ -1,3 +1,4 @@
+import base from "./base"
 import login from "./login"
-
-export default [login]
+import survey from "./survey";
+export default [base, login, survey]
