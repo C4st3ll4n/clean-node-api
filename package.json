@@ -17,7 +17,8 @@
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
     "dev": "node src/main/serve r.ts",
-    "test:coverrals": "npm run test:ci && coveralls < coverage/lcov.info"
+    "test:coverrals": "npm run test:ci && coveralls < coverage/lcov.info",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Pedro Henrique",
