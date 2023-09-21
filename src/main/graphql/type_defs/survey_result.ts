@@ -2,22 +2,24 @@ import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Query {
-    surveys: [Survey!]!
+    surveyResult(surveyID: String): SurveyResult!
   }
   extend type Mutation {
-    addSurvey(question: String!): Survey!
+    addAnswer(surveyId: String!, answer: String!): SurveyResult!
   }
 
-  type Survey {
-    id: ID!
+  type SurveyResult {
+    surveyId: String!
     question: String!
     date: DateTimeISO!
-    didAnswer: Boolean
     answers: [Answer!]!
   }
 
   type Answer {
     image: String
     answer: String!
+    count: Int!
+    percent: Float!
+    isCurrentAnswer: Boolean
   }
 `;

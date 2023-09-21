@@ -11,6 +11,6 @@ export default {
         surveys: async () => adaptResolver(makeListSurveyController(), {})
     },
     Mutation:{
-        create: async (_:any, args:any) => adaptResolver(makeCreateSurveyController(), args)
+        addSurvey: async (_:any, args:any) => adaptResolver(makeCreateSurveyController(), args)
     }
 }
