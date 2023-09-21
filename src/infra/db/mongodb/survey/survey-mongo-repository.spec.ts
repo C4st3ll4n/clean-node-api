@@ -20,9 +20,10 @@ const makeSurvey = async (): Promise<SurveyModel> => {
         ],
         date: new Date()
     })
-    const survey = res.ops[0];
+    const survey = await surveyCollection.findOne({_id: res.insertedId})
+
     return  {
-        id: survey._id,
+        id: survey._id.toHexString(),
         answers: survey.answers,
         date: survey.date,
         question: survey.question
@@ -36,9 +37,11 @@ const makeAccount = async (): Promise<AccountModel> => {
         password: await hash("123", 12),
         role: "admin"
     });
-    const account = res.ops[0];
+    //const account = res.ops[0];
+    const account = await accountCollection.findOne({_id: res.insertedId})
+    
     return {
-        id: account._id,
+        id: account._id.toHexString(),
         name: account.name,
         email: account.email,
         password: account.password,
@@ -51,7 +54,7 @@ const makeSurveyResult = async (accountId: string, surveyId: string): Promise<Su
         surveyId: surveyId,
         accountId: accountId
     });
-    const surveyResult = res.ops[0];
+    const surveyResult = await surveyResultCollection.findOne({_id: res.insertedId})
     return {
         answers: surveyResult.answers,
         date: surveyResult.date,
@@ -75,13 +78,13 @@ describe("Survey Mongo Repository", () => {
     });
 
     beforeEach(async () => {
-        surveyCollection = await MongoHelper.getCollection("surveys");
+        surveyCollection = MongoHelper.getCollection("surveys");
         await surveyCollection.deleteMany({});
 
-        accountCollection = await MongoHelper.getCollection("accounts");
+        accountCollection = MongoHelper.getCollection("accounts");
         await surveyCollection.deleteMany({});
 
-        surveyResultCollection = await MongoHelper.getCollection("surveyResults");
+        surveyResultCollection = MongoHelper.getCollection("surveyResults");
         await surveyCollection.deleteMany({});
     });
 

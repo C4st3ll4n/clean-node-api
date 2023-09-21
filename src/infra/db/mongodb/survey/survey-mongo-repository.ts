@@ -7,12 +7,12 @@ const ObjectId = require("mongodb").ObjectId;
 
 export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRepository {
     async add(data: AddSurveyRepository.Param): Promise<void> {
-        const surveyCollection = await MongoHelper.getCollection("surveys");
+        const surveyCollection = MongoHelper.getCollection("surveys");
         await surveyCollection.insertOne(data);
     }
 
     async all(): Promise<ListSurveyRepository.Results> {
-        const surveyCollection = await MongoHelper.getCollection("surveys");
+        const surveyCollection = MongoHelper.getCollection("surveys");
         const surveys: any[] = await surveyCollection.find().toArray();
         if (surveys.length == 0) return [];
         return surveys.map((value):ListSurveyRepository.Result => ({
@@ -24,7 +24,7 @@ export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRep
     }
 
     async loadByAccountID(accountId: string): Promise<ListSurveyRepository.Results> {
-        const surveyCollection = await MongoHelper.getCollection("surveys");
+        const surveyCollection = MongoHelper.getCollection("surveys");
 
         const query = new QueryBuilder()
             .lookup({
@@ -67,13 +67,13 @@ export class SurveyMongoRepository implements AddSurveyRepository, ListSurveyRep
     }
 
     async loadById(surveyId: string): Promise<ListSurveyRepository.Result> {
-        const surveyCollection = await MongoHelper.getCollection("surveys")
+        const surveyCollection = MongoHelper.getCollection("surveys")
 
         const survey = await surveyCollection.findOne({_id: new ObjectId(surveyId)})
 
         if (survey != null) {
             return {
-                id: survey._id,
+                id: `${survey._id}`,
                 answers: survey.answers,
                 date: survey.date,
                 question: survey.question

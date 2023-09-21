@@ -18,7 +18,7 @@ describe("Account Mongo Repository", () => {
   });
 
   beforeEach(async () => {
-    accountCollection = await MongoHelper.getCollection("accounts");
+    accountCollection = MongoHelper.getCollection("accounts");
     await accountCollection.deleteMany({});
   });
 
@@ -119,15 +119,19 @@ describe("Account Mongo Repository", () => {
   describe("update", () => {
     test("Should update the account accessToken on updateAccessToken success", async () => {
       const sut = makeSut();
-      const fakeAccount = await accountCollection.insertOne({
+      const res = await accountCollection.insertOne({
         name: "any_name",
         email: "any_email@email.com",
         password: "any_password",
       });
-      expect(fakeAccount.ops[0].accessToken).toBeFalsy();
-      await sut.updateAccessToken(fakeAccount.ops[0]._id, "any_token");
+      
+      const fakeAccount = await accountCollection.findOne({_id: res.insertedId});
+
+      expect(fakeAccount.accessToken).toBeFalsy();
+
+      await sut.updateAccessToken(fakeAccount._id.toHexString(), "any_token");
       const account = await accountCollection.findOne({
-        _id: fakeAccount.ops[0]._id,
+        _id: fakeAccount._id,
       });
       expect(account).toBeTruthy();
       expect(account.accessToken).toBe("any_token");

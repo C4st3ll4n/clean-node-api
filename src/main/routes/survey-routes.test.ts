@@ -20,7 +20,7 @@ const makeAccessToken = async (): Promise<string> => {
         role: "admin"
     });
 
-    const id = resCreate.ops[0]._id;
+    const id = resCreate.insertedId;
     const token = sign({id}, env.SECRET);
     const updateResult = await accountCollection.updateOne(
         {
@@ -47,10 +47,10 @@ describe("Survey Routes", () => {
     });
 
     beforeEach(async () => {
-        surveyColletion = await MongoHelper.getCollection("surveys");
+        surveyColletion = MongoHelper.getCollection("surveys");
         await surveyColletion.deleteMany({});
 
-        accountCollection = await MongoHelper.getCollection("accounts");
+        accountCollection = MongoHelper.getCollection("accounts");
         await accountCollection.deleteMany({});
     });
 

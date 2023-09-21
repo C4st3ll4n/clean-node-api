@@ -3,7 +3,7 @@ import { MongoHelper } from "../helpers/mongo-helper";
 
 export class LogErrorMongoRepository implements LogErrorRepository {
   async logError(stack: string): Promise<void> {
-    const logCollection = await MongoHelper.getCollection("logs");
+    const logCollection = MongoHelper.getCollection("logs");
     await logCollection.insertOne({ stack, date: new Date() });
   }
 }
