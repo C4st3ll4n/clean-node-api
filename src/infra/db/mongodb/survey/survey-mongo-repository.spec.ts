@@ -23,7 +23,7 @@ const makeSurvey = async (): Promise<SurveyModel> => {
     const survey = await surveyCollection.findOne({_id: res.insertedId})
 
     return  {
-        id: survey._id.toHexString(),
+        id: survey._id.toString(),
         answers: survey.answers,
         date: survey.date,
         question: survey.question
@@ -41,7 +41,7 @@ const makeAccount = async (): Promise<AccountModel> => {
     const account = await accountCollection.findOne({_id: res.insertedId})
     
     return {
-        id: account._id.toHexString(),
+        id: account._id.toString(),
         name: account.name,
         email: account.email,
         password: account.password,
@@ -174,7 +174,7 @@ describe("Survey Mongo Repository", () => {
                 const surveyResult = await makeSurveyResult(account.id,createdSurvey.id);
 
                 const result = await sut.loadByAccountID(account.id);
-                expect(result[0].id).toEqual(createdSurvey.id)
+                expect(result[0].id).toEqual(createdSurvey.id.toString())
                 expect(result[0].didAnswer).toEqual(true)
             })
 
@@ -183,7 +183,7 @@ describe("Survey Mongo Repository", () => {
                 const createdSurvey = await makeSurvey();
                 const createdAccount = await makeAccount();
                 const result = await sut.loadByAccountID(createdAccount.id);
-                expect(result[0].id).toEqual(createdSurvey.id)
+                expect(result[0].id).toEqual(createdSurvey.id.toString())
                 expect(result[0].didAnswer).toEqual(false)
             })
             test("Should return empty", async () => {

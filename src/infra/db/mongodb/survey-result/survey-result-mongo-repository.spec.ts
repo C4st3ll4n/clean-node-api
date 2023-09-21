@@ -155,7 +155,7 @@ describe("Survey Result Mongo Repository", () => {
 
             expect(surveyResult).toBeTruthy();
             expect(surveyResult.answers).toBeTruthy();
-            expect(surveyResult.surveyId).toEqual(survey.id);
+            expect(surveyResult.surveyId).toEqual(survey.id.toString());
             expect(surveyResult.answers[0].answer).toEqual(survey.answers[0].answer);
             expect(surveyResult.answers[0].isCurrentAnswer).toEqual(true);
             expect(surveyResult.answers[0].count).toEqual(1);
@@ -167,7 +167,7 @@ describe("Survey Result Mongo Repository", () => {
             const account = await makeAccount();
             const sut = makeSut();
             const surveyResult = await sut.loadBySurveyId(survey.id, account.id);
-
+            console.log(surveyResult)
             expect(surveyResult).toBeTruthy();
             expect(surveyResult.answers).toBeTruthy();
             expect(surveyResult.surveyId).toEqual(survey.id);
